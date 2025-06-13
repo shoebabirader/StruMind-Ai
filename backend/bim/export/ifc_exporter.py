@@ -1,482 +1,274 @@
 """
-IFC (Industry Foundation Classes) export functionality
+IFC export functionality for structural models
 """
 
-from typing import Dict, List, Optional, Any, Tuple
-from datetime import datetime
 import uuid
-import json
+from datetime import datetime
+from typing import Dict, List, Optional
+import logging
 
-from db.models.structural import Node, Element, Material, Section
-from db.models.project import Project
-from core.exceptions import ExportError
+from ...core.modeling.model import StructuralModel
+from ...core.modeling.nodes import Node
+from ...core.modeling.elements import Element
+from ...core.modeling.materials import Material
+from ...core.modeling.sections import Section
+
+logger = logging.getLogger(__name__)
 
 
 class IFCExporter:
-    """IFC file exporter for structural models"""
+    """
+    Export structural models to IFC format
+    """
     
     def __init__(self):
-        self.entity_counter = 1
-        self.entities = {}
-        self.project_info = {}
+        self.model = None
+        self.project = None
+        self.site = None
+        self.building = None
+        self.building_storey = None
+        
+        # Mapping dictionaries
+        self.node_mapping = {}  # Node ID to IFC entity
+        self.element_mapping = {}  # Element ID to IFC entity
+        self.material_mapping = {}  # Material ID to IFC entity
+        self.section_mapping = {}  # Section ID to IFC entity
+        
+    def export_to_file(self, model: StructuralModel, file_path: str, 
+                      project_info: Optional[Dict] = None) -> bool:
+        """
+        Export structural model to IFC file (simplified implementation)
+        """
+        logger.info(f"Exporting model to IFC file: {file_path}")
+        
+        try:
+            self.model = model
+            
+            # Create IFC data structure
+            ifc_data = self._create_ifc_data_structure(project_info or {})
+            
+            # Export to simplified IFC format (JSON-based for this implementation)
+            self._write_ifc_file(ifc_data, file_path)
+            
+            logger.info(f"IFC export completed successfully: {file_path}")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to export IFC file: {e}")
+            raise
     
-    def export_model(self, project: Project, nodes: List[Node], elements: List[Element],
-                    materials: List[Material], sections: List[Section]) -> str:
-        """Export structural model to IFC format"""
-        
-        # Initialize IFC file
-        ifc_content = self._create_ifc_header(project)
-        
-        # Create basic IFC entities
-        ifc_content += self._create_basic_entities(project)
+    def _create_ifc_data_structure(self, project_info: Dict) -> Dict:
+        """
+        Create IFC data structure
+        """
+        ifc_data = {
+            "header": {
+                "file_description": ["StruMind Structural Model"],
+                "file_name": project_info.get("name", self.model.name or "StruMind Project"),
+                "time_stamp": datetime.now().isoformat(),
+                "author": ["StruMind Platform"],
+                "organization": ["StruMind"],
+                "preprocessor_version": "StruMind 1.0.0",
+                "originating_system": "StruMind Structural Analysis Platform",
+                "authorization": "StruMind User"
+            },
+            "units": {
+                "length_unit": "METRE",
+                "area_unit": "SQUARE_METRE", 
+                "volume_unit": "CUBIC_METRE",
+                "force_unit": "NEWTON",
+                "pressure_unit": "PASCAL"
+            },
+            "project": {
+                "global_id": self._generate_guid(),
+                "name": project_info.get("name", self.model.name or "StruMind Project"),
+                "description": project_info.get("description", self.model.description or ""),
+                "phase": "Design"
+            },
+            "site": {
+                "global_id": self._generate_guid(),
+                "name": project_info.get("site_name", "Site"),
+                "description": "Project site"
+            },
+            "building": {
+                "global_id": self._generate_guid(),
+                "name": project_info.get("building_name", "Building"),
+                "description": "Main building"
+            },
+            "building_storey": {
+                "global_id": self._generate_guid(),
+                "name": "Ground Floor",
+                "elevation": 0.0
+            },
+            "materials": [],
+            "sections": [],
+            "nodes": [],
+            "elements": []
+        }
         
         # Export materials
-        material_entities = self._export_materials(materials)
-        ifc_content += material_entities
+        for material in self.model.materials:
+            ifc_material = self._export_material(material)
+            ifc_data["materials"].append(ifc_material)
+            self.material_mapping[material.id] = ifc_material["global_id"]
         
         # Export sections
-        section_entities = self._export_sections(sections)
-        ifc_content += section_entities
+        for section in self.model.sections:
+            ifc_section = self._export_section(section)
+            ifc_data["sections"].append(ifc_section)
+            self.section_mapping[section.id] = ifc_section["global_id"]
         
-        # Export nodes as points
-        node_entities = self._export_nodes(nodes)
-        ifc_content += node_entities
+        # Export nodes
+        for node in self.model.nodes:
+            ifc_node = self._export_node(node)
+            ifc_data["nodes"].append(ifc_node)
+            self.node_mapping[node.id] = ifc_node["global_id"]
         
         # Export elements
-        element_entities = self._export_elements(elements, nodes, materials, sections)
-        ifc_content += element_entities
+        for element in self.model.elements:
+            ifc_element = self._export_element(element)
+            if ifc_element:
+                ifc_data["elements"].append(ifc_element)
+                self.element_mapping[element.id] = ifc_element["global_id"]
         
-        # Close IFC file
-        ifc_content += self._create_ifc_footer()
-        
-        return ifc_content
+        return ifc_data
     
-    def _create_ifc_header(self, project: Project) -> str:
-        """Create IFC file header"""
-        timestamp = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S")
-        
-        header = f"""ISO-10303-21;
-HEADER;
-FILE_DESCRIPTION(('ViewDefinition [StructuralAnalysisView]'),'2;1');
-FILE_NAME('{project.name}.ifc','{timestamp}',('StruMind Platform'),('StruMind Engineering'),'StruMind IFC Exporter','StruMind Platform v1.0','');
-FILE_SCHEMA(('IFC4'));
-ENDSEC;
-
-DATA;
-"""
-        return header
+    def _export_material(self, material: Material) -> Dict:
+        """
+        Export material to IFC format
+        """
+        return {
+            "global_id": self._generate_guid(),
+            "name": material.name,
+            "description": f"{material.material_type} material",
+            "material_type": material.material_type,
+            "properties": {
+                "elastic_modulus": material.elastic_modulus,
+                "poisson_ratio": material.poisson_ratio,
+                "density": material.density,
+                "yield_strength": getattr(material, 'yield_strength', None),
+                "compressive_strength": getattr(material, 'compressive_strength', None),
+                "tensile_strength": getattr(material, 'tensile_strength', None)
+            }
+        }
     
-    def _create_basic_entities(self, project: Project) -> str:
-        """Create basic IFC entities"""
-        entities = ""
+    def _export_section(self, section: Section) -> Dict:
+        """
+        Export section to IFC format
+        """
+        section_data = {
+            "global_id": self._generate_guid(),
+            "name": section.name,
+            "section_type": section.section_type,
+            "properties": {
+                "area": section.area,
+                "moment_of_inertia_x": section.moment_of_inertia_x,
+                "moment_of_inertia_y": section.moment_of_inertia_y,
+                "torsional_constant": getattr(section, 'torsional_constant', 0)
+            }
+        }
         
-        # Create project
-        project_id = self._get_next_id()
-        self.entities['project'] = project_id
-        entities += f"#{project_id}= IFCPROJECT('{self._generate_guid()}',$,'{project.name}','{project.description or ''}',$,$,$,(#{self._get_next_id()}),#{self._get_next_id()});\n"
+        # Add type-specific properties
+        if hasattr(section, 'width'):
+            section_data["properties"]["width"] = section.width
+        if hasattr(section, 'depth'):
+            section_data["properties"]["depth"] = section.depth
+        if hasattr(section, 'thickness'):
+            section_data["properties"]["thickness"] = section.thickness
+        if hasattr(section, 'diameter'):
+            section_data["properties"]["diameter"] = section.diameter
         
-        # Create geometric representation context
-        context_id = self._get_current_id()
-        entities += f"#{context_id}= IFCGEOMETRICREPRESENTATIONCONTEXT($,'Model',3,1.E-05,#{self._get_next_id()},$);\n"
-        
-        # Create axis placement
-        axis_id = self._get_current_id()
-        entities += f"#{axis_id}= IFCAXIS2PLACEMENT3D(#{self._get_next_id()},$,$);\n"
-        
-        # Create origin point
-        origin_id = self._get_current_id()
-        entities += f"#{origin_id}= IFCCARTESIANPOINT((0.,0.,0.));\n"
-        
-        # Create unit assignment
-        unit_id = self._get_current_id() - 1
-        entities += f"#{unit_id}= IFCUNITASSIGNMENT((#{self._get_next_id()},#{self._get_next_id()},#{self._get_next_id()}));\n"
-        
-        # Create SI units
-        length_unit_id = self._get_current_id()
-        entities += f"#{length_unit_id}= IFCSIUNIT(*,.LENGTHUNIT.,.MILLI.,.METRE.);\n"
-        
-        area_unit_id = self._get_current_id()
-        entities += f"#{area_unit_id}= IFCSIUNIT(*,.AREAUNIT.,$,.SQUARE_METRE.);\n"
-        
-        volume_unit_id = self._get_current_id()
-        entities += f"#{volume_unit_id}= IFCSIUNIT(*,.VOLUMEUNIT.,$,.CUBIC_METRE.);\n"
-        
-        # Create site
-        site_id = self._get_next_id()
-        self.entities['site'] = site_id
-        entities += f"#{site_id}= IFCSITE('{self._generate_guid()}',$,'Site',$,$,#{self._get_next_id()},$,.ELEMENT.,$,$,$,$,$);\n"
-        
-        # Create site placement
-        site_placement_id = self._get_current_id()
-        entities += f"#{site_placement_id}= IFCLOCALPLACEMENT($,#{axis_id});\n"
-        
-        # Create building
-        building_id = self._get_next_id()
-        self.entities['building'] = building_id
-        entities += f"#{building_id}= IFCBUILDING('{self._generate_guid()}',$,'{project.name} Structure',$,$,#{self._get_next_id()},$,.ELEMENT.,$,$,$);\n"
-        
-        # Create building placement
-        building_placement_id = self._get_current_id()
-        entities += f"#{building_placement_id}= IFCLOCALPLACEMENT(#{site_placement_id},#{axis_id});\n"
-        
-        return entities
+        return section_data
     
-    def _export_materials(self, materials: List[Material]) -> str:
-        """Export materials to IFC"""
-        entities = ""
-        
-        for material in materials:
-            material_id = self._get_next_id()
-            self.entities[f'material_{material.id}'] = material_id
-            
-            # Create material
-            entities += f"#{material_id}= IFCMATERIAL('{material.name}','{material.material_type}','');\n"
-            
-            # Create material properties
-            if material.properties:
-                props_id = self._get_next_id()
-                
-                # Extract common properties
-                elastic_modulus = material.properties.get('elastic_modulus', 0)
-                poisson_ratio = material.properties.get('poisson_ratio', 0)
-                density = material.properties.get('density', 0)
-                
-                entities += f"#{props_id}= IFCMATERIALPROPERTIES('{material.name} Properties','{material.material_type}',#{material_id});\n"
-                
-                # Add mechanical properties
-                if elastic_modulus > 0:
-                    mech_props_id = self._get_next_id()
-                    entities += f"#{mech_props_id}= IFCMECHANICALPROPERTIES({elastic_modulus},{poisson_ratio},$,$,$,$,$);\n"
-        
-        return entities
+    def _export_node(self, node: Node) -> Dict:
+        """
+        Export node to IFC format
+        """
+        return {
+            "global_id": self._generate_guid(),
+            "id": node.id,
+            "coordinates": {
+                "x": node.x,
+                "y": node.y,
+                "z": node.z
+            },
+            "restraints": getattr(node, 'restraints', {})
+        }
     
-    def _export_sections(self, sections: List[Section]) -> str:
-        """Export sections to IFC"""
-        entities = ""
-        
-        for section in sections:
-            section_id = self._get_next_id()
-            self.entities[f'section_{section.id}'] = section_id
-            
-            # Determine IFC section type based on section type
-            if section.section_type == "i_section":
-                entities += self._create_i_section(section_id, section)
-            elif section.section_type == "rectangular":
-                entities += self._create_rectangular_section(section_id, section)
-            elif section.section_type == "circular":
-                entities += self._create_circular_section(section_id, section)
-            else:
-                # Generic section
-                entities += f"#{section_id}= IFCARBITRARYCLOSEDPROFILEDEF(.AREA.,'{section.name}',$);\n"
-        
-        return entities
-    
-    def _create_i_section(self, section_id: int, section: Section) -> str:
-        """Create IFC I-section"""
-        props = section.properties
-        
-        # Extract I-section properties
-        overall_width = props.get('bf', 200)  # mm
-        overall_depth = props.get('d', 400)   # mm
-        web_thickness = props.get('tw', 10)   # mm
-        flange_thickness = props.get('tf', 15) # mm
-        
-        return f"#{section_id}= IFCISHAPEPROFILEDEF(.AREA.,'{section.name}',$,{overall_width},{overall_depth},{web_thickness},{flange_thickness},$,$,$);\n"
-    
-    def _create_rectangular_section(self, section_id: int, section: Section) -> str:
-        """Create IFC rectangular section"""
-        props = section.properties
-        
-        width = props.get('width', 300)   # mm
-        height = props.get('height', 500) # mm
-        
-        return f"#{section_id}= IFCRECTANGLEPROFILEDEF(.AREA.,'{section.name}',$,{width},{height});\n"
-    
-    def _create_circular_section(self, section_id: int, section: Section) -> str:
-        """Create IFC circular section"""
-        props = section.properties
-        
-        radius = props.get('radius', 150)  # mm
-        
-        return f"#{section_id}= IFCCIRCLEPROFILEDEF(.AREA.,'{section.name}',$,{radius});\n"
-    
-    def _export_nodes(self, nodes: List[Node]) -> str:
-        """Export nodes as IFC points"""
-        entities = ""
-        
-        for node in nodes:
-            point_id = self._get_next_id()
-            self.entities[f'node_{node.id}'] = point_id
-            
-            # Convert coordinates to mm (IFC typically uses mm)
-            x_mm = node.x * 1000
-            y_mm = node.y * 1000
-            z_mm = node.z * 1000
-            
-            entities += f"#{point_id}= IFCCARTESIANPOINT(({x_mm},{y_mm},{z_mm}));\n"
-        
-        return entities
-    
-    def _export_elements(self, elements: List[Element], nodes: List[Node],
-                        materials: List[Material], sections: List[Section]) -> str:
-        """Export elements to IFC"""
-        entities = ""
-        
-        # Create node lookup
-        node_lookup = {node.id: node for node in nodes}
-        
-        for element in elements:
-            if element.element_type in ["BEAM", "COLUMN", "BRACE"]:
-                entities += self._create_structural_member(element, node_lookup)
-            elif element.element_type in ["SHELL", "PLATE", "WALL", "SLAB"]:
-                entities += self._create_structural_surface_member(element, node_lookup)
-        
-        return entities
-    
-    def _create_structural_member(self, element: Element, node_lookup: Dict) -> str:
-        """Create IFC structural member (beam/column)"""
-        entities = ""
-        
-        member_id = self._get_next_id()
-        self.entities[f'element_{element.id}'] = member_id
-        
-        # Get start and end nodes
-        start_node = node_lookup.get(element.start_node_id)
-        end_node = node_lookup.get(element.end_node_id)
-        
-        if not start_node or not end_node:
-            return ""
-        
-        # Create structural member
-        member_type = "BEAM" if element.element_type == "BEAM" else "COLUMN"
-        entities += f"#{member_id}= IFCSTRUCTURALMEMBER('{self._generate_guid()}',$,'{element.label or element.element_type}',$,$,#{self._get_next_id()},$,.{member_type}.);\n"
-        
-        # Create placement
-        placement_id = self._get_current_id()
-        entities += f"#{placement_id}= IFCLOCALPLACEMENT($,#{self._get_next_id()});\n"
-        
-        # Create axis placement for member
-        axis_id = self._get_current_id()
-        start_point_id = self.entities.get(f'node_{element.start_node_id}')
-        entities += f"#{axis_id}= IFCAXIS2PLACEMENT3D(#{start_point_id},$,$);\n"
-        
-        # Create geometric representation
-        geom_id = self._get_next_id()
-        entities += f"#{geom_id}= IFCPRODUCTDEFINITIONSHAPE($,$,(#{self._get_next_id()}));\n"
-        
-        # Create shape representation
-        shape_id = self._get_current_id()
-        entities += f"#{shape_id}= IFCSHAPEREPRESENTATION(#{self.entities.get('project', 1)},'Body','SweptSolid',(#{self._get_next_id()}));\n"
-        
-        # Create line for member axis
-        line_id = self._get_current_id()
-        end_point_id = self.entities.get(f'node_{element.end_node_id}')
-        entities += f"#{line_id}= IFCLINE(#{start_point_id},#{self._get_next_id()});\n"
-        
-        # Create direction vector
-        vector_id = self._get_current_id()
-        dx = end_node.x - start_node.x
-        dy = end_node.y - start_node.y
-        dz = end_node.z - start_node.z
-        length = (dx**2 + dy**2 + dz**2)**0.5
-        if length > 0:
-            dx, dy, dz = dx/length, dy/length, dz/length
-        entities += f"#{vector_id}= IFCVECTOR(#{self._get_next_id()},{length * 1000});\n"
-        
-        # Create direction
-        dir_id = self._get_current_id()
-        entities += f"#{dir_id}= IFCDIRECTION(({dx},{dy},{dz}));\n"
-        
-        return entities
-    
-    def _create_structural_surface_member(self, element: Element, node_lookup: Dict) -> str:
-        """Create IFC structural surface member (shell/plate)"""
-        entities = ""
-        
-        member_id = self._get_next_id()
-        self.entities[f'element_{element.id}'] = member_id
-        
-        # Create structural surface member
-        entities += f"#{member_id}= IFCSTRUCTURALSURFACEMEMBER('{self._generate_guid()}',$,'{element.label or element.element_type}',$,$,#{self._get_next_id()},$,.SHELL.,$);\n"
-        
-        # Create placement
-        placement_id = self._get_current_id()
-        start_point_id = self.entities.get(f'node_{element.start_node_id}')
-        entities += f"#{placement_id}= IFCLOCALPLACEMENT($,#{self._get_next_id()});\n"
-        
-        # Create axis placement
-        axis_id = self._get_current_id()
-        entities += f"#{axis_id}= IFCAXIS2PLACEMENT3D(#{start_point_id},$,$);\n"
-        
-        return entities
-    
-    def _create_ifc_footer(self) -> str:
-        """Create IFC file footer"""
-        return "\nENDSEC;\n\nEND-ISO-10303-21;\n"
-    
-    def _get_next_id(self) -> int:
-        """Get next entity ID"""
-        current_id = self.entity_counter
-        self.entity_counter += 1
-        return current_id
-    
-    def _get_current_id(self) -> int:
-        """Get current entity ID without incrementing"""
-        return self.entity_counter
-    
-    def _generate_guid(self) -> str:
-        """Generate IFC GUID"""
-        # IFC uses a compressed GUID format
-        guid = str(uuid.uuid4()).replace('-', '')
-        return guid[:22]  # IFC GUID is 22 characters
-    
-    def export_to_file(self, filepath: str, project: Project, nodes: List[Node],
-                      elements: List[Element], materials: List[Material],
-                      sections: List[Section]) -> None:
-        """Export model to IFC file"""
+    def _export_element(self, element: Element) -> Dict:
+        """
+        Export element to IFC format
+        """
         try:
-            ifc_content = self.export_model(project, nodes, elements, materials, sections)
+            # Get start and end nodes
+            start_node = self.model.get_node(element.start_node_id)
+            end_node = self.model.get_node(element.end_node_id)
             
-            with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(ifc_content)
-                
-        except Exception as e:
-            raise ExportError(f"Failed to export IFC file: {str(e)}")
-    
-    def validate_export_data(self, nodes: List[Node], elements: List[Element]) -> List[str]:
-        """Validate data before export"""
-        errors = []
-        
-        if not nodes:
-            errors.append("No nodes to export")
-        
-        if not elements:
-            errors.append("No elements to export")
-        
-        # Check element connectivity
-        node_ids = {node.id for node in nodes}
-        for element in elements:
-            if element.start_node_id not in node_ids:
-                errors.append(f"Element {element.id} references non-existent start node {element.start_node_id}")
+            if not start_node or not end_node:
+                logger.warning(f"Missing nodes for element {element.id}")
+                return None
             
-            if element.end_node_id and element.end_node_id not in node_ids:
-                errors.append(f"Element {element.id} references non-existent end node {element.end_node_id}")
-        
-        return errors
-
-
-class IFCImporter:
-    """IFC file importer for structural models"""
-    
-    def __init__(self):
-        self.entities = {}
-        self.nodes = []
-        self.elements = []
-        self.materials = []
-        self.sections = []
-    
-    def import_model(self, ifc_content: str) -> Dict[str, Any]:
-        """Import structural model from IFC content"""
-        try:
-            # Parse IFC content
-            self._parse_ifc_content(ifc_content)
-            
-            # Extract structural data
-            self._extract_nodes()
-            self._extract_elements()
-            self._extract_materials()
-            self._extract_sections()
-            
-            return {
-                "nodes": self.nodes,
-                "elements": self.elements,
-                "materials": self.materials,
-                "sections": self.sections
+            element_data = {
+                "global_id": self._generate_guid(),
+                "id": element.id,
+                "element_type": element.element_type,
+                "name": f"{element.element_type.title()}_{element.id}",
+                "start_node_id": element.start_node_id,
+                "end_node_id": element.end_node_id,
+                "start_node_global_id": self.node_mapping.get(element.start_node_id),
+                "end_node_global_id": self.node_mapping.get(element.end_node_id),
+                "material_id": element.material_id,
+                "material_global_id": self.material_mapping.get(element.material_id),
+                "section_id": element.section_id,
+                "section_global_id": self.section_mapping.get(element.section_id),
+                "length": element.length,
+                "geometry": {
+                    "start_point": [start_node.x, start_node.y, start_node.z],
+                    "end_point": [end_node.x, end_node.y, end_node.z]
+                }
             }
             
+            # Add element-specific properties
+            if element.element_type == "beam":
+                element_data["predefined_type"] = "BEAM"
+            elif element.element_type == "column":
+                element_data["predefined_type"] = "COLUMN"
+            elif element.element_type == "brace":
+                element_data["predefined_type"] = "BRACE"
+            else:
+                element_data["predefined_type"] = "USERDEFINED"
+            
+            return element_data
+            
         except Exception as e:
-            raise ExportError(f"Failed to import IFC file: {str(e)}")
+            logger.warning(f"Failed to export element {element.id}: {e}")
+            return None
     
-    def _parse_ifc_content(self, content: str) -> None:
-        """Parse IFC file content"""
-        # Simplified IFC parsing - in practice would use a proper IFC library
-        lines = content.split('\n')
+    def _write_ifc_file(self, ifc_data: Dict, file_path: str):
+        """
+        Write IFC data to file (simplified JSON format)
+        """
+        import json
         
-        for line in lines:
-            line = line.strip()
-            if line.startswith('#') and '=' in line:
-                # Extract entity ID and definition
-                parts = line.split('=', 1)
-                entity_id = int(parts[0][1:])  # Remove #
-                entity_def = parts[1].strip()
-                
-                self.entities[entity_id] = entity_def
+        # For a full IFC implementation, this would write proper IFC format
+        # For this implementation, we'll write structured JSON
+        with open(file_path, 'w') as f:
+            json.dump(ifc_data, f, indent=2)
     
-    def _extract_nodes(self) -> None:
-        """Extract nodes from IFC entities"""
-        for entity_id, entity_def in self.entities.items():
-            if 'IFCCARTESIANPOINT' in entity_def:
-                # Extract coordinates
-                coords_start = entity_def.find('((') + 2
-                coords_end = entity_def.find('))')
-                if coords_start > 1 and coords_end > coords_start:
-                    coords_str = entity_def[coords_start:coords_end]
-                    coords = [float(x.strip()) for x in coords_str.split(',')]
-                    
-                    if len(coords) >= 3:
-                        # Convert from mm to m
-                        node_data = {
-                            "id": str(entity_id),
-                            "x": coords[0] / 1000.0,
-                            "y": coords[1] / 1000.0,
-                            "z": coords[2] / 1000.0,
-                            "label": f"N{entity_id}"
-                        }
-                        self.nodes.append(node_data)
+    def _generate_guid(self) -> str:
+        """
+        Generate IFC-style GUID
+        """
+        return str(uuid.uuid4()).replace('-', '').upper()[:22]
     
-    def _extract_elements(self) -> None:
-        """Extract elements from IFC entities"""
-        for entity_id, entity_def in self.entities.items():
-            if 'IFCSTRUCTURALMEMBER' in entity_def or 'IFCSTRUCTURALSURFACEMEMBER' in entity_def:
-                # Extract element information
-                element_data = {
-                    "id": str(entity_id),
-                    "element_type": "BEAM",  # Simplified
-                    "label": f"E{entity_id}"
-                }
-                self.elements.append(element_data)
-    
-    def _extract_materials(self) -> None:
-        """Extract materials from IFC entities"""
-        for entity_id, entity_def in self.entities.items():
-            if 'IFCMATERIAL' in entity_def:
-                # Extract material information
-                material_data = {
-                    "id": str(entity_id),
-                    "name": f"Material_{entity_id}",
-                    "material_type": "steel"  # Simplified
-                }
-                self.materials.append(material_data)
-    
-    def _extract_sections(self) -> None:
-        """Extract sections from IFC entities"""
-        for entity_id, entity_def in self.entities.items():
-            if 'PROFILEDEF' in entity_def:
-                # Extract section information
-                section_data = {
-                    "id": str(entity_id),
-                    "name": f"Section_{entity_id}",
-                    "section_type": "i_section"  # Simplified
-                }
-                self.sections.append(section_data)
-    
-    def import_from_file(self, filepath: str) -> Dict[str, Any]:
-        """Import model from IFC file"""
-        try:
-            with open(filepath, 'r', encoding='utf-8') as f:
-                ifc_content = f.read()
-            
-            return self.import_model(ifc_content)
-            
-        except Exception as e:
-            raise ExportError(f"Failed to import IFC file: {str(e)}")
+    def get_export_summary(self) -> Dict:
+        """
+        Get summary of exported model
+        """
+        return {
+            "materials_exported": len(self.material_mapping),
+            "sections_exported": len(self.section_mapping),
+            "elements_exported": len(self.element_mapping),
+            "nodes_exported": len(self.node_mapping),
+            "export_timestamp": datetime.now().isoformat()
+        }
