@@ -18,7 +18,7 @@ from sqlalchemy import (
     String,
     Text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -96,7 +96,7 @@ class DesignCase(Base):
     
     __tablename__ = "design_cases"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Design identification
     name = Column(String(100), nullable=False)
@@ -142,8 +142,8 @@ class DesignCase(Base):
     elements_warning = Column(Integer, nullable=True)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    created_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    created_by_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -163,7 +163,7 @@ class DesignResult(Base):
     
     __tablename__ = "design_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Design result identification
     result_name = Column(String(100), nullable=False)
@@ -221,8 +221,8 @@ class DesignResult(Base):
     code_checks = Column(JSON, nullable=True)
     
     # Foreign Keys
-    design_case_id = Column(UUID(as_uuid=True), ForeignKey("design_cases.id", ondelete="CASCADE"), nullable=False)
-    element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
+    design_case_id = Column(String(36), ForeignKey("design_cases.id", ondelete="CASCADE"), nullable=False)
+    element_id = Column(String(36), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -243,7 +243,7 @@ class ReinforcementDetail(Base):
     
     __tablename__ = "reinforcement_details"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Reinforcement identification
     rebar_type = Column(SQLEnum(RebarType), nullable=False)
@@ -286,7 +286,7 @@ class ReinforcementDetail(Base):
     bending_schedule_id = Column(String(50), nullable=True)
     
     # Foreign Keys
-    design_result_id = Column(UUID(as_uuid=True), ForeignKey("design_results.id", ondelete="CASCADE"), nullable=False)
+    design_result_id = Column(String(36), ForeignKey("design_results.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -304,15 +304,15 @@ class ConnectionDetail(Base):
     
     __tablename__ = "connection_details"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Connection identification
     connection_type = Column(SQLEnum(ConnectionType), nullable=False)
     connection_name = Column(String(100), nullable=True)
     
     # Connected elements
-    primary_element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id"), nullable=False)
-    secondary_element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id"), nullable=True)
+    primary_element_id = Column(String(36), ForeignKey("elements.id"), nullable=False)
+    secondary_element_id = Column(String(36), ForeignKey("elements.id"), nullable=True)
     
     # Connection geometry
     connection_location = Column(String(50), nullable=False)  # "start", "end", "intermediate"
@@ -374,7 +374,7 @@ class ConnectionDetail(Base):
     detail_drawing_id = Column(String(50), nullable=True)
     
     # Foreign Keys
-    design_result_id = Column(UUID(as_uuid=True), ForeignKey("design_results.id", ondelete="CASCADE"), nullable=False)
+    design_result_id = Column(String(36), ForeignKey("design_results.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

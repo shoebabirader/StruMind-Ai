@@ -19,7 +19,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -60,7 +60,7 @@ class Project(Base):
     
     __tablename__ = "projects"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Basic Information
     name = Column(String(200), nullable=False)
@@ -107,8 +107,8 @@ class Project(Base):
     storage_used_mb = Column(Float, default=0.0, nullable=False)
     
     # Foreign Keys
-    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
-    created_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    organization_id = Column(String(36), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False)
+    created_by_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -144,11 +144,11 @@ class ProjectMember(Base):
     
     __tablename__ = "project_members"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Foreign Keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     
     # Membership Details
     role = Column(SQLEnum(ProjectMemberRole), default=ProjectMemberRole.VIEWER, nullable=False)

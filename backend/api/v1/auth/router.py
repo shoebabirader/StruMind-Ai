@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from passlib.context import CryptContext
 
 from db.database import get_db
-from db.models.user import User, Organization
+from db.models.user import User, Organization, OrganizationMember, UserRole, SubscriptionPlan
 from core.config import get_settings
 from core.exceptions import AuthenticationError, ValidationError
 
@@ -121,8 +121,8 @@ async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     if user_data.organization_name:
         organization = Organization(
             name=user_data.organization_name,
-            subscription_tier="free",
-            is_active=True
+            slug=user_data.organization_name.lower().replace(" ", "-"),
+            subscription_plan=SubscriptionPlan.FREE
         )
         db.add(organization)
         db.flush()  # Get organization ID
@@ -131,14 +131,27 @@ async def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user_data.password)
     user = User(
         email=user_data.email,
+        username=user_data.email,  # Use email as username for now
         hashed_password=hashed_password,
         first_name=user_data.first_name,
         last_name=user_data.last_name,
-        organization_id=organization.id if organization else None,
+        company=user_data.organization_name,
         is_active=True
     )
     
     db.add(user)
+    db.flush()  # Get user ID
+    
+    # Create organization membership if organization exists
+    if organization:
+        membership = OrganizationMember(
+            user_id=user.id,
+            organization_id=organization.id,
+            role=UserRole.OWNER,
+            is_active=True
+        )
+        db.add(membership)
+    
     db.commit()
     db.refresh(user)
     
@@ -174,6 +187,11 @@ async def login_user(login_data: UserLogin, db: Session = Depends(get_db)):
             detail="Inactive user"
         )
     
+    # Get user's organization (if any)
+    organization_id = None
+    if user.organization_memberships:
+        organization_id = str(user.organization_memberships[0].organization_id)
+    
     # Create access token
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -185,19 +203,24 @@ async def login_user(login_data: UserLogin, db: Session = Depends(get_db)):
         token_type="bearer",
         expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         user_id=str(user.id),
-        organization_id=str(user.organization_id) if user.organization_id else None
+        organization_id=organization_id
     )
 
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(current_user: User = Depends(get_current_user)):
     """Get current user information"""
+    # Get user's organization (if any)
+    organization_id = None
+    if current_user.organization_memberships:
+        organization_id = str(current_user.organization_memberships[0].organization_id)
+    
     return UserResponse(
         id=str(current_user.id),
         email=current_user.email,
         first_name=current_user.first_name,
         last_name=current_user.last_name,
         is_active=current_user.is_active,
-        organization_id=str(current_user.organization_id) if current_user.organization_id else None,
+        organization_id=organization_id,
         created_at=current_user.created_at
     )
 

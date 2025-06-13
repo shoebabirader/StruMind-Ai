@@ -1,10 +1,12 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Building2, Calculator, Layers, Zap } from 'lucide-react'
 
 export default function HomePage() {
+  const router = useRouter()
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -16,8 +18,12 @@ export default function HomePage() {
               <h1 className="text-2xl font-bold text-gray-900">StruMind</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost">Sign In</Button>
-              <Button>Get Started</Button>
+              <Button variant="ghost" onClick={() => router.push('/auth/login')}>
+                Sign In
+              </Button>
+              <Button onClick={() => router.push('/auth/signup')}>
+                Get Started
+              </Button>
             </div>
           </div>
         </div>
@@ -35,10 +41,10 @@ export default function HomePage() {
             unified AI-powered cloud-native platform for structural analysis, design, and BIM.
           </p>
           <div className="flex justify-center space-x-4">
-            <Button size="lg" className="px-8">
+            <Button size="lg" className="px-8" onClick={() => router.push('/auth/signup')}>
               Start Free Trial
             </Button>
-            <Button size="lg" variant="outline" className="px-8">
+            <Button size="lg" variant="outline" className="px-8" onClick={() => alert('Demo coming soon!')}>
               Watch Demo
             </Button>
           </div>

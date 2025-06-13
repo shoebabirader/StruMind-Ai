@@ -19,7 +19,7 @@ from sqlalchemy import (
     String,
     Text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -67,7 +67,7 @@ class BIMModel(Base):
     
     __tablename__ = "bim_models"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Model identification
     name = Column(String(200), nullable=False)
@@ -129,8 +129,8 @@ class BIMModel(Base):
     # }
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    created_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    created_by_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -150,7 +150,7 @@ class BIMElement(Base):
     
     __tablename__ = "bim_elements"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Element identification
     global_id = Column(String(100), nullable=False)  # IFC GlobalId or similar
@@ -198,7 +198,7 @@ class BIMElement(Base):
     # }
     
     # Relationships to structural model
-    structural_element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id", ondelete="SET NULL"), nullable=True)
+    structural_element_id = Column(String(36), ForeignKey("elements.id", ondelete="SET NULL"), nullable=True)
     
     # Level/Storey information
     level_name = Column(String(100), nullable=True)
@@ -217,8 +217,8 @@ class BIMElement(Base):
     properties = Column(JSON, nullable=True)
     
     # Foreign Keys
-    bim_model_id = Column(UUID(as_uuid=True), ForeignKey("bim_models.id", ondelete="CASCADE"), nullable=False)
-    parent_element_id = Column(UUID(as_uuid=True), ForeignKey("bim_elements.id", ondelete="CASCADE"), nullable=True)
+    bim_model_id = Column(String(36), ForeignKey("bim_models.id", ondelete="CASCADE"), nullable=False)
+    parent_element_id = Column(String(36), ForeignKey("bim_elements.id", ondelete="CASCADE"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -240,7 +240,7 @@ class BIMProperty(Base):
     
     __tablename__ = "bim_properties"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Property identification
     property_set_name = Column(String(100), nullable=False)  # e.g., "Pset_BeamCommon"
@@ -263,7 +263,7 @@ class BIMProperty(Base):
     calculation_formula = Column(Text, nullable=True)
     
     # Foreign Keys
-    bim_element_id = Column(UUID(as_uuid=True), ForeignKey("bim_elements.id", ondelete="CASCADE"), nullable=False)
+    bim_element_id = Column(String(36), ForeignKey("bim_elements.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

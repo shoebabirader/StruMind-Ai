@@ -6,6 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from uuid import UUID
+import uuid
 from datetime import datetime
 
 from db.database import get_db
@@ -71,7 +72,13 @@ async def create_project(
     db: Session = Depends(get_db)
 ):
     """Create new project"""
+    # Get user's organization
+    organization_id = None
+    if current_user.organization_memberships:
+        organization_id = str(current_user.organization_memberships[0].organization_id)
+    
     project = Project(
+        id=str(uuid.uuid4()),
         name=project_data.name,
         description=project_data.description,
         location=project_data.location,
@@ -80,8 +87,8 @@ async def create_project(
         design_code_steel=project_data.design_code_steel,
         design_code_seismic=project_data.design_code_seismic,
         status=ProjectStatus.DRAFT,
-        owner_id=current_user.id,
-        organization_id=current_user.organization_id
+        created_by_id=str(current_user.id),
+        organization_id=organization_id
     )
     
     db.add(project)
@@ -100,7 +107,7 @@ async def create_project(
         status=project.status,
         created_at=project.created_at,
         updated_at=project.updated_at,
-        owner_id=str(project.owner_id),
+        owner_id=str(project.created_by_id),
         organization_id=str(project.organization_id) if project.organization_id else None
     )
 
@@ -115,7 +122,7 @@ async def list_projects(
     db: Session = Depends(get_db)
 ):
     """List user's projects with pagination and filtering"""
-    query = db.query(Project).filter(Project.owner_id == current_user.id)
+    query = db.query(Project).filter(Project.created_by_id == str(current_user.id))
     
     # Apply filters
     if status:
@@ -151,7 +158,7 @@ async def list_projects(
             status=project.status,
             created_at=project.created_at,
             updated_at=project.updated_at,
-            owner_id=str(project.owner_id),
+            owner_id=str(project.created_by_id),
             organization_id=str(project.organization_id) if project.organization_id else None
         )
         for project in projects
@@ -173,7 +180,7 @@ async def get_project(
     """Get project by ID"""
     project = db.query(Project).filter(
         Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.created_by_id == current_user.id
     ).first()
     
     if not project:
@@ -194,7 +201,7 @@ async def get_project(
         status=project.status,
         created_at=project.created_at,
         updated_at=project.updated_at,
-        owner_id=str(project.owner_id),
+        owner_id=str(project.created_by_id),
         organization_id=str(project.organization_id) if project.organization_id else None
     )
 
@@ -208,7 +215,7 @@ async def update_project(
     """Update project"""
     project = db.query(Project).filter(
         Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.created_by_id == current_user.id
     ).first()
     
     if not project:
@@ -239,7 +246,7 @@ async def update_project(
         status=project.status,
         created_at=project.created_at,
         updated_at=project.updated_at,
-        owner_id=str(project.owner_id),
+        owner_id=str(project.created_by_id),
         organization_id=str(project.organization_id) if project.organization_id else None
     )
 
@@ -252,7 +259,7 @@ async def delete_project(
     """Delete project"""
     project = db.query(Project).filter(
         Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.created_by_id == current_user.id
     ).first()
     
     if not project:
@@ -275,7 +282,7 @@ async def duplicate_project(
     """Duplicate existing project"""
     original_project = db.query(Project).filter(
         Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.created_by_id == current_user.id
     ).first()
     
     if not original_project:
@@ -294,8 +301,8 @@ async def duplicate_project(
         design_code_steel=original_project.design_code_steel,
         design_code_seismic=original_project.design_code_seismic,
         status=ProjectStatus.DRAFT,
-        owner_id=current_user.id,
-        organization_id=current_user.organization_id
+        created_by_id=current_user.id,
+        organization_id=current_user.organization_memberships[0].organization_id if current_user.organization_memberships else None
     )
     
     db.add(duplicate_project)
@@ -314,6 +321,6 @@ async def duplicate_project(
         status=duplicate_project.status,
         created_at=duplicate_project.created_at,
         updated_at=duplicate_project.updated_at,
-        owner_id=str(duplicate_project.owner_id),
+        owner_id=str(duplicate_project.created_by_id),
         organization_id=str(duplicate_project.organization_id) if duplicate_project.organization_id else None
     )

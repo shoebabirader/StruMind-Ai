@@ -18,7 +18,7 @@ from sqlalchemy import (
     String,
     Text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -62,7 +62,7 @@ class AnalysisCase(Base):
     
     __tablename__ = "analysis_cases"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Analysis identification
     name = Column(String(100), nullable=False)
@@ -101,8 +101,8 @@ class AnalysisCase(Base):
     solver_info = Column(JSON, nullable=True)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    created_by_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    created_by_id = Column(String(36), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -122,7 +122,7 @@ class AnalysisResult(Base):
     
     __tablename__ = "analysis_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Result identification
     result_name = Column(String(100), nullable=False)
@@ -146,7 +146,7 @@ class AnalysisResult(Base):
     data_size_mb = Column(Float, nullable=True)
     
     # Foreign Keys
-    analysis_case_id = Column(UUID(as_uuid=True), ForeignKey("analysis_cases.id", ondelete="CASCADE"), nullable=False)
+    analysis_case_id = Column(String(36), ForeignKey("analysis_cases.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -166,7 +166,7 @@ class NodeResult(Base):
     
     __tablename__ = "node_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Displacement results
     displacement_x = Column(Float, nullable=True)
@@ -188,8 +188,8 @@ class NodeResult(Base):
     additional_results = Column(JSON, nullable=True)
     
     # Foreign Keys
-    analysis_result_id = Column(UUID(as_uuid=True), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
-    node_id = Column(UUID(as_uuid=True), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
+    analysis_result_id = Column(String(36), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
+    node_id = Column(String(36), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
     
     # Relationships
     analysis_result = relationship("AnalysisResult", back_populates="node_results")
@@ -204,7 +204,7 @@ class ElementResult(Base):
     
     __tablename__ = "element_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Position along element (0.0 to 1.0)
     position = Column(Float, default=0.0, nullable=False)
@@ -242,8 +242,8 @@ class ElementResult(Base):
     additional_results = Column(JSON, nullable=True)
     
     # Foreign Keys
-    analysis_result_id = Column(UUID(as_uuid=True), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
-    element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
+    analysis_result_id = Column(String(36), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
+    element_id = Column(String(36), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
     
     # Relationships
     analysis_result = relationship("AnalysisResult", back_populates="element_results")
@@ -258,7 +258,7 @@ class ModalResult(Base):
     
     __tablename__ = "modal_results"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Modal properties
     mode_number = Column(Integer, nullable=False)
@@ -294,7 +294,7 @@ class ModalResult(Base):
     properties = Column(JSON, nullable=True)
     
     # Foreign Keys
-    analysis_result_id = Column(UUID(as_uuid=True), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
+    analysis_result_id = Column(String(36), ForeignKey("analysis_results.id", ondelete="CASCADE"), nullable=False)
     
     # Relationships
     analysis_result = relationship("AnalysisResult", back_populates="modal_results")

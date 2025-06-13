@@ -18,7 +18,7 @@ from sqlalchemy import (
     String,
     Text,
 )
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
@@ -97,7 +97,7 @@ class Node(Base):
     
     __tablename__ = "nodes"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Node identification
     node_id = Column(Integer, nullable=False)  # User-defined node number
@@ -112,7 +112,7 @@ class Node(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -135,7 +135,7 @@ class Material(Base):
     
     __tablename__ = "materials"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Material identification
     name = Column(String(100), nullable=False)
@@ -165,7 +165,7 @@ class Material(Base):
     is_default = Column(Boolean, default=False, nullable=False)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -185,7 +185,7 @@ class Section(Base):
     
     __tablename__ = "sections"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Section identification
     name = Column(String(100), nullable=False)
@@ -217,8 +217,8 @@ class Section(Base):
     is_default = Column(Boolean, default=False, nullable=False)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    material_id = Column(UUID(as_uuid=True), ForeignKey("materials.id", ondelete="SET NULL"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    material_id = Column(String(36), ForeignKey("materials.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -238,7 +238,7 @@ class Element(Base):
     
     __tablename__ = "elements"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Element identification
     element_id = Column(Integer, nullable=False)  # User-defined element number
@@ -246,8 +246,8 @@ class Element(Base):
     element_type = Column(SQLEnum(ElementType), nullable=False)
     
     # Connectivity
-    start_node_id = Column(UUID(as_uuid=True), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
-    end_node_id = Column(UUID(as_uuid=True), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=True)  # Null for point elements
+    start_node_id = Column(String(36), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
+    end_node_id = Column(String(36), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=True)  # Null for point elements
     
     # Properties
     length = Column(Float, nullable=True)  # Calculated or user-defined
@@ -261,9 +261,9 @@ class Element(Base):
     mesh_size = Column(Float, nullable=True)  # For shell/plate elements
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    material_id = Column(UUID(as_uuid=True), ForeignKey("materials.id", ondelete="SET NULL"), nullable=True)
-    section_id = Column(UUID(as_uuid=True), ForeignKey("sections.id", ondelete="SET NULL"), nullable=True)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    material_id = Column(String(36), ForeignKey("materials.id", ondelete="SET NULL"), nullable=True)
+    section_id = Column(String(36), ForeignKey("sections.id", ondelete="SET NULL"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -288,7 +288,7 @@ class LoadCase(Base):
     
     __tablename__ = "load_cases"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Load case identification
     name = Column(String(100), nullable=False)
@@ -300,7 +300,7 @@ class LoadCase(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -319,7 +319,7 @@ class Load(Base):
     
     __tablename__ = "loads"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Load identification
     name = Column(String(100), nullable=True)
@@ -341,9 +341,9 @@ class Load(Base):
     properties = Column(JSON, nullable=True)
     
     # Foreign Keys
-    load_case_id = Column(UUID(as_uuid=True), ForeignKey("load_cases.id", ondelete="CASCADE"), nullable=False)
-    node_id = Column(UUID(as_uuid=True), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=True)
-    element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id", ondelete="CASCADE"), nullable=True)
+    load_case_id = Column(String(36), ForeignKey("load_cases.id", ondelete="CASCADE"), nullable=False)
+    node_id = Column(String(36), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=True)
+    element_id = Column(String(36), ForeignKey("elements.id", ondelete="CASCADE"), nullable=True)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -363,7 +363,7 @@ class LoadCombination(Base):
     
     __tablename__ = "load_combinations"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Combination identification
     name = Column(String(100), nullable=False)
@@ -378,7 +378,7 @@ class LoadCombination(Base):
     is_active = Column(Boolean, default=True, nullable=False)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -396,7 +396,7 @@ class BoundaryCondition(Base):
     
     __tablename__ = "boundary_conditions"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Boundary condition identification
     name = Column(String(100), nullable=True)
@@ -422,8 +422,8 @@ class BoundaryCondition(Base):
     properties = Column(JSON, nullable=True)
     
     # Foreign Keys
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
-    node_id = Column(UUID(as_uuid=True), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
+    project_id = Column(String(36), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
+    node_id = Column(String(36), ForeignKey("nodes.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
@@ -442,7 +442,7 @@ class Release(Base):
     
     __tablename__ = "releases"
     
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=uuid.uuid4)
     
     # Release identification
     name = Column(String(100), nullable=True)
@@ -465,7 +465,7 @@ class Release(Base):
     partial_factor_zz = Column(Float, default=1.0, nullable=False)
     
     # Foreign Keys
-    element_id = Column(UUID(as_uuid=True), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
+    element_id = Column(String(36), ForeignKey("elements.id", ondelete="CASCADE"), nullable=False)
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)

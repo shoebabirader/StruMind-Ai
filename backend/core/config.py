@@ -38,11 +38,20 @@ class Settings(BaseSettings):
     
     # CORS
     ALLOWED_ORIGINS: List[str] = Field(
-        default=["http://localhost:3000", "https://app.strumind.com"],
+        default=[
+            "http://localhost:3000", 
+            "https://app.strumind.com",
+            "https://work-2-tgaufxkwcjeifuoc.prod-runtime.all-hands.dev"
+        ],
         env="ALLOWED_ORIGINS"
     )
     ALLOWED_HOSTS: List[str] = Field(
-        default=["localhost", "127.0.0.1", "api.strumind.com"],
+        default=[
+            "localhost", 
+            "127.0.0.1", 
+            "api.strumind.com",
+            "work-1-tgaufxkwcjeifuoc.prod-runtime.all-hands.dev"
+        ],
         env="ALLOWED_HOSTS"
     )
     

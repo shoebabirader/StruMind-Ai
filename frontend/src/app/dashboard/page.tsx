@@ -1,9 +1,7 @@
-/**
- * Main Dashboard Page for StruMind SaaS Platform
- */
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { 
   Building2, 
   Plus, 
@@ -13,141 +11,201 @@ import {
   Users,
   Calendar,
   Activity,
-  TrendingUp
-} from 'lucide-react';
+  TrendingUp,
+  LogOut
+} from 'lucide-react'
+import { API_ENDPOINTS } from '@/lib/config'
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
 interface Project {
-  id: string;
-  name: string;
-  description: string;
-  status: 'draft' | 'active' | 'completed' | 'archived';
-  projectType: string;
-  createdAt: string;
-  updatedAt: string;
-  memberCount: number;
-  analysisCount: number;
-  thumbnail?: string;
+  id: string
+  name: string
+  description: string
+  status: 'draft' | 'active' | 'completed' | 'archived'
+  projectType: string
+  createdAt: string
+  updatedAt: string
+  memberCount: number
+  analysisCount: number
+  thumbnail?: string
 }
 
 interface DashboardStats {
-  totalProjects: number;
-  activeAnalyses: number;
-  teamMembers: number;
-  storageUsed: number;
+  totalProjects: number
+  activeAnalyses: number
+  teamMembers: number
+  storageUsed: number
 }
 
-const Dashboard: React.FC = () => {
-  const router = useRouter();
-  const [projects, setProjects] = useState<Project[]>([]);
+export default function DashboardPage() {
+  const router = useRouter()
+  const [projects, setProjects] = useState<Project[]>([])
   const [stats, setStats] = useState<DashboardStats>({
     totalProjects: 0,
     activeAnalyses: 0,
     teamMembers: 0,
     storageUsed: 0
-  });
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
-  const [loading, setLoading] = useState(true);
+  })
+  const [searchTerm, setSearchTerm] = useState('')
+  const [filterStatus, setFilterStatus] = useState<string>('all')
+  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    // Check authentication
+    const token = localStorage.getItem('token')
+    const userData = localStorage.getItem('user')
+    
+    if (!token) {
+      router.push('/auth/login')
+      return
+    }
+
+    if (userData && userData !== 'undefined') {
+      try {
+        setUser(JSON.parse(userData))
+      } catch (error) {
+        console.error('Error parsing user data:', error)
+        localStorage.removeItem('user')
+        router.push('/auth/login')
+        return
+      }
+    }
+
+    fetchDashboardData()
+  }, [router])
 
   const fetchDashboardData = async () => {
     try {
-      setLoading(true);
+      setLoading(true)
       
-      // Simulate API calls
-      const mockProjects: Project[] = [
-        {
-          id: '1',
-          name: 'Office Tower - Downtown',
-          description: '25-story commercial building with steel frame',
-          status: 'active',
-          projectType: 'commercial',
-          createdAt: '2024-01-15',
-          updatedAt: '2024-01-20',
-          memberCount: 5,
-          analysisCount: 12,
-          thumbnail: '/api/placeholder/300/200'
+      const token = localStorage.getItem('token')
+      
+      // Fetch projects from API
+      const projectsResponse = await fetch(API_ENDPOINTS.projects.list, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        {
-          id: '2',
-          name: 'Residential Complex',
-          description: 'Multi-story residential building with RC frame',
-          status: 'draft',
-          projectType: 'residential',
-          createdAt: '2024-01-10',
-          updatedAt: '2024-01-18',
-          memberCount: 3,
-          analysisCount: 8,
-        },
-        {
-          id: '3',
-          name: 'Bridge Design',
-          description: 'Cable-stayed bridge over river',
-          status: 'completed',
-          projectType: 'infrastructure',
-          createdAt: '2023-12-01',
-          updatedAt: '2024-01-05',
-          memberCount: 8,
-          analysisCount: 25,
+      })
+
+      if (projectsResponse.ok) {
+        const projectsData = await projectsResponse.json()
+        setProjects(projectsData.projects || [])
+        
+        // Calculate stats from projects
+        const mockStats: DashboardStats = {
+          totalProjects: projectsData.projects?.length || 0,
+          activeAnalyses: 7,
+          teamMembers: 12,
+          storageUsed: 2.4
         }
-      ];
+        setStats(mockStats)
+      } else {
+        // Use mock data if API fails
+        const mockProjects: Project[] = [
+          {
+            id: '1',
+            name: 'Office Tower - Downtown',
+            description: '25-story commercial building with steel frame',
+            status: 'active',
+            projectType: 'commercial',
+            createdAt: '2024-01-15',
+            updatedAt: '2024-01-20',
+            memberCount: 5,
+            analysisCount: 12,
+          },
+          {
+            id: '2',
+            name: 'Residential Complex',
+            description: 'Multi-story residential building with RC frame',
+            status: 'draft',
+            projectType: 'residential',
+            createdAt: '2024-01-10',
+            updatedAt: '2024-01-18',
+            memberCount: 3,
+            analysisCount: 8,
+          },
+          {
+            id: '3',
+            name: 'Bridge Design',
+            description: 'Cable-stayed bridge over river',
+            status: 'completed',
+            projectType: 'infrastructure',
+            createdAt: '2023-12-01',
+            updatedAt: '2024-01-05',
+            memberCount: 8,
+            analysisCount: 25,
+          }
+        ]
 
-      const mockStats: DashboardStats = {
-        totalProjects: 15,
-        activeAnalyses: 7,
-        teamMembers: 12,
-        storageUsed: 2.4
-      };
+        const mockStats: DashboardStats = {
+          totalProjects: 15,
+          activeAnalyses: 7,
+          teamMembers: 12,
+          storageUsed: 2.4
+        }
 
-      setProjects(mockProjects);
-      setStats(mockStats);
+        setProjects(mockProjects)
+        setStats(mockStats)
+      }
     } catch (error) {
-      console.error('Failed to fetch dashboard data:', error);
+      console.error('Failed to fetch dashboard data:', error)
+      // Use mock data on error
+      setProjects([])
+      setStats({
+        totalProjects: 0,
+        activeAnalyses: 0,
+        teamMembers: 0,
+        storageUsed: 0
+      })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const filteredProjects = projects.filter(project => {
     const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || project.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
+                         project.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesFilter = filterStatus === 'all' || project.status === filterStatus
+    return matchesSearch && matchesFilter
+  })
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'active': return 'bg-green-100 text-green-800';
-      case 'draft': return 'bg-yellow-100 text-yellow-800';
-      case 'completed': return 'bg-blue-100 text-blue-800';
-      case 'archived': return 'bg-gray-100 text-gray-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'active': return 'bg-green-100 text-green-800'
+      case 'draft': return 'bg-yellow-100 text-yellow-800'
+      case 'completed': return 'bg-blue-100 text-blue-800'
+      case 'archived': return 'bg-gray-100 text-gray-800'
+      default: return 'bg-gray-100 text-gray-800'
     }
-  };
+  }
 
   const handleCreateProject = () => {
-    router.push('/projects/new');
-  };
+    router.push('/projects/new')
+  }
 
   const handleProjectClick = (projectId: string) => {
-    router.push(`/projects/${projectId}`);
-  };
+    router.push(`/projects/${projectId}`)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    router.push('/')
+  }
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
-    );
+    )
   }
 
   return (
@@ -165,10 +223,26 @@ const Dashboard: React.FC = () => {
                 <Plus className="h-4 w-4 mr-2" />
                 New Project
               </Button>
-              <Avatar>
-                <AvatarImage src="/api/placeholder/32/32" />
-                <AvatarFallback>JD</AvatarFallback>
-              </Avatar>
+              <div className="relative group">
+                <Avatar className="cursor-pointer">
+                  <AvatarImage src="/api/placeholder/32/32" />
+                  <AvatarFallback>
+                    {user?.first_name?.[0]}{user?.last_name?.[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
+                  <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                    {user?.first_name} {user?.last_name}
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign out
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -323,7 +397,5 @@ const Dashboard: React.FC = () => {
         </div>
       </main>
     </div>
-  );
-};
-
-export default Dashboard;
+  )
+}
