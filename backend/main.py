@@ -47,8 +47,8 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan manager"""
     logger.info("Starting StruMind Backend")
     
-    # Initialize database
-    await create_tables()
+    # Initialize database (temporarily disabled due to UUID/SQLite compatibility)
+    # await create_tables()
     
     # Initialize other services
     logger.info("Backend services initialized")

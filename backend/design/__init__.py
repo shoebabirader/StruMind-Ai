@@ -2,10 +2,11 @@
 Structural design modules
 """
 
-from .concrete import ConcreteDesign, RCBeamDesign, RCColumnDesign, RCSlabDesign
-from .steel import SteelDesign, SteelBeamDesign, SteelColumnDesign, SteelConnectionDesign
-from .foundation import FoundationDesign, ShallowFoundationDesign, DeepFoundationDesign
-from .composite import CompositeDesign, CompositeBeamDesign
+# Temporarily comment out imports to fix server startup
+# from .concrete import ConcreteDesign, RCBeamDesign, RCColumnDesign, RCSlabDesign
+# from .steel import SteelDesign, SteelBeamDesign, SteelColumnDesign, SteelConnectionDesign
+# from .foundation import FoundationDesign, ShallowFoundationDesign, DeepFoundationDesign
+# from .composite import CompositeDesign, CompositeBeamDesign
 from .design_engine import DesignEngine, DesignManager
 from .codes import DesignCodeManager, IS456, ACI318, AISC360, IS800
 

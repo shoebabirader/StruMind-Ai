@@ -13,6 +13,23 @@ from .results.router import router as results_router
 
 api_router = APIRouter()
 
+@api_router.get("/health")
+async def api_health():
+    """API v1 health check"""
+    return {
+        "status": "healthy",
+        "version": "1.0.0",
+        "service": "strumind-api-v1",
+        "endpoints": {
+            "auth": "/api/v1/auth",
+            "projects": "/api/v1/projects",
+            "models": "/api/v1/models",
+            "analysis": "/api/v1/analysis",
+            "design": "/api/v1/design",
+            "results": "/api/v1/results"
+        }
+    }
+
 # Include all sub-routers
 api_router.include_router(
     auth_router,

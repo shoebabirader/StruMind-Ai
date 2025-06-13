@@ -85,6 +85,15 @@ def get_sync_session():
     return SessionLocal()
 
 
+def get_db():
+    """Dependency to get synchronous database session"""
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
 async def close_database():
     """Close database connections"""
     await async_engine.dispose()

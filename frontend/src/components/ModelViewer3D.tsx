@@ -6,6 +6,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Grid, Text, Line } from '@react-three/drei';
+import * as THREE from 'three';
 import { Vector3, BufferGeometry, Float32BufferAttribute } from 'three';
 
 interface Node {
@@ -80,21 +81,23 @@ const ElementComponent: React.FC<{
   onClick: () => void;
   displacements?: Record<string, { x: number; y: number; z: number }>;
 }> = ({ element, startNode, endNode, isSelected, onClick, displacements }) => {
-  const lineRef = useRef<THREE.Line>(null);
+  const lineRef = useRef<any>(null);
   
-  const startPos = displacements?.[startNode.id] 
+  const startDisp = displacements?.[startNode.id];
+  const startPos = startDisp 
     ? [
-        startNode.x + displacements[startNode.id].x,
-        startNode.y + displacements[startNode.id].y,
-        startNode.z + displacements[startNode.id].z
+        startNode.x + startDisp.x,
+        startNode.y + startDisp.y,
+        startNode.z + startDisp.z
       ]
     : [startNode.x, startNode.y, startNode.z];
     
-  const endPos = displacements?.[endNode.id]
+  const endDisp = displacements?.[endNode.id];
+  const endPos = endDisp
     ? [
-        endNode.x + displacements[endNode.id].x,
-        endNode.y + displacements[endNode.id].y,
-        endNode.z + displacements[endNode.id].z
+        endNode.x + endDisp.x,
+        endNode.y + endDisp.y,
+        endNode.z + endDisp.z
       ]
     : [endNode.x, endNode.y, endNode.z];
 
@@ -213,7 +216,7 @@ const ModelScene: React.FC<{
           node={node}
           isSelected={selectedNodeId === node.id}
           onClick={() => onNodeSelect(node.id)}
-          displacement={displacements?.[node.id]}
+          {...(displacements?.[node.id] && { displacement: displacements[node.id] })}
         />
       ))}
       
@@ -232,7 +235,7 @@ const ModelScene: React.FC<{
             endNode={endNode}
             isSelected={selectedElementId === element.id}
             onClick={() => onElementSelect(element.id)}
-            displacements={displacements}
+            {...(displacements && { displacements })}
           />
         );
       })}
@@ -278,7 +281,7 @@ const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           selectedElementId={selectedElementId}
           onNodeSelect={handleNodeSelect}
           onElementSelect={handleElementSelect}
-          displacements={deformedShape ? displacements : undefined}
+          {...(deformedShape && displacements && { displacements })}
           showGrid={showGrid}
           showLabels={showLabels}
         />
