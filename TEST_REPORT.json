@@ -1,0 +1,402 @@
+{
+  "test_session": {
+    "timestamp": "2025-06-13T19:56:59.887766",
+    "platform": "StruMind SaaS",
+    "test_type": "End-to-End Workflow Simulation"
+  },
+  "summary": {
+    "total_tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "success_rate": "100.0%",
+    "total_duration": 0.018101930618286133
+  },
+  "test_results": [
+    {
+      "test_name": "Health Check",
+      "status": "PASSED",
+      "duration": 0.008311033248901367,
+      "details": {
+        "response": {
+          "status": "healthy",
+          "service": "strumind-backend"
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "API Endpoint /api/v1/projects/health",
+      "status": "PASSED",
+      "duration": 0.002483367919921875,
+      "details": {
+        "response": {
+          "status": "healthy",
+          "service": "projects"
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "API Endpoint /api/v1/analysis/health",
+      "status": "PASSED",
+      "duration": 0.0016779899597167969,
+      "details": {
+        "response": {
+          "status": "healthy",
+          "service": "analysis"
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "API Endpoint /api/v1/design/health",
+      "status": "PASSED",
+      "duration": 0.0011420249938964844,
+      "details": {
+        "response": {
+          "status": "healthy",
+          "service": "design"
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "API Endpoint /api/v1/results/health",
+      "status": "PASSED",
+      "duration": 0.0011544227600097656,
+      "details": {
+        "response": {
+          "status": "healthy",
+          "service": "results"
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "User Registration",
+      "status": "PASSED",
+      "duration": 5.245208740234375e-06,
+      "details": {
+        "user_data": {
+          "email": "test.user.1749844618@strumind.com",
+          "username": "testuser1749844618",
+          "first_name": "Test",
+          "last_name": "User",
+          "password": "SecurePassword123!"
+        },
+        "user_id": "7d92dd84-0d3a-4cb0-bbee-ebd4c0d43b3f"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Organization Creation",
+      "status": "PASSED",
+      "duration": 4.0531158447265625e-06,
+      "details": {
+        "org_data": {
+          "name": "Test Engineering Firm",
+          "slug": "test-firm-1749844618",
+          "description": "Test organization for StruMind platform testing"
+        },
+        "organization_id": "1e5511e3-dcdc-4e6f-a22e-47644d585d21"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Project Creation",
+      "status": "PASSED",
+      "duration": 2.384185791015625e-06,
+      "details": {
+        "project_data": {
+          "name": "Test Office Building",
+          "description": "10-story steel frame office building for testing",
+          "project_type": "commercial",
+          "location": "New York, NY",
+          "design_code_concrete": "ACI 318",
+          "design_code_steel": "AISC 360"
+        },
+        "project_id": "479fbacb-411f-49e6-aba1-ab5f7ce818ce"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Structural Model Creation",
+      "status": "PASSED",
+      "duration": 0.00028252601623535156,
+      "details": {
+        "nodes_count": 12,
+        "elements_count": 14,
+        "model_type": "2-story steel frame"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Material Assignment",
+      "status": "PASSED",
+      "duration": 4.6253204345703125e-05,
+      "details": {
+        "materials_count": 2
+      },
+      "error": null
+    },
+    {
+      "test_name": "Section Assignment",
+      "status": "PASSED",
+      "duration": 4.887580871582031e-05,
+      "details": {
+        "sections_count": 2
+      },
+      "error": null
+    },
+    {
+      "test_name": "Load Application",
+      "status": "PASSED",
+      "duration": 0.00015997886657714844,
+      "details": {
+        "total_loads": 20,
+        "dead_loads": 6,
+        "live_loads": 6,
+        "wind_loads": 8
+      },
+      "error": null
+    },
+    {
+      "test_name": "Boundary Conditions",
+      "status": "PASSED",
+      "duration": 6.914138793945312e-05,
+      "details": {
+        "boundary_conditions_count": 4
+      },
+      "error": null
+    },
+    {
+      "test_name": "Linear Static Analysis",
+      "status": "PASSED",
+      "duration": 3.6716461181640625e-05,
+      "details": {
+        "analysis_data": {
+          "analysis_type": "linear_static",
+          "load_combinations": [
+            {
+              "name": "1.4D",
+              "factors": {
+                "Dead Load": 1.4
+              }
+            },
+            {
+              "name": "1.2D + 1.6L",
+              "factors": {
+                "Dead Load": 1.2,
+                "Live Load": 1.6
+              }
+            },
+            {
+              "name": "1.2D + 1.0L + 1.0W",
+              "factors": {
+                "Dead Load": 1.2,
+                "Live Load": 1.0,
+                "Wind Load": 1.0
+              }
+            }
+          ]
+        },
+        "results": {
+          "analysis_id": "20ca0979-8cde-472d-b1b4-db301a2f50c1",
+          "status": "completed",
+          "execution_time": 2.5,
+          "total_dofs": 72,
+          "max_displacement": 0.025,
+          "max_stress": 150000000.0,
+          "convergence": true
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "Modal Analysis",
+      "status": "PASSED",
+      "duration": 5.173683166503906e-05,
+      "details": {
+        "modal_results": {
+          "analysis_id": "8325b56c-2534-4657-a2a2-6a77eae131da",
+          "num_modes": 10,
+          "frequencies": [
+            2.45,
+            3.12,
+            4.78,
+            6.23,
+            7.89,
+            9.45,
+            11.23,
+            13.67,
+            15.89,
+            18.45
+          ],
+          "periods": [
+            0.408,
+            0.321,
+            0.209,
+            0.161,
+            0.127,
+            0.106,
+            0.089,
+            0.073,
+            0.063,
+            0.054
+          ],
+          "mass_participation": {
+            "x_direction": [
+              0.65,
+              0.15,
+              0.08,
+              0.05,
+              0.03,
+              0.02,
+              0.01,
+              0.01,
+              0.0,
+              0.0
+            ],
+            "y_direction": [
+              0.02,
+              0.68,
+              0.12,
+              0.08,
+              0.04,
+              0.03,
+              0.02,
+              0.01,
+              0.0,
+              0.0
+            ],
+            "z_direction": [
+              0.01,
+              0.01,
+              0.72,
+              0.15,
+              0.06,
+              0.03,
+              0.02,
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "Steel Design",
+      "status": "PASSED",
+      "duration": 4.2438507080078125e-05,
+      "details": {
+        "total_elements": 14,
+        "passed_elements": 14,
+        "pass_rate": "100.0%"
+      },
+      "error": null
+    },
+    {
+      "test_name": "Connection Design",
+      "status": "PASSED",
+      "duration": 0.00010657310485839844,
+      "details": {
+        "connections_designed": 6
+      },
+      "error": null
+    },
+    {
+      "test_name": "3D Visualization",
+      "status": "PASSED",
+      "duration": 1.0251998901367188e-05,
+      "details": {
+        "visualization_data": {
+          "model_bounds": {
+            "min": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "max": {
+              "x": 18,
+              "y": 0,
+              "z": 7
+            }
+          },
+          "render_objects": {
+            "nodes": 12,
+            "elements": 14,
+            "supports": 4,
+            "loads": 20
+          },
+          "deformed_shape": {
+            "scale_factor": 100,
+            "max_displacement": 0.025
+          },
+          "force_diagrams": {
+            "moment_diagram": true,
+            "shear_diagram": true,
+            "axial_diagram": true
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "BIM Export",
+      "status": "PASSED",
+      "duration": 6.67572021484375e-06,
+      "details": {
+        "export_data": {
+          "formats": [
+            "IFC",
+            "glTF",
+            "DXF"
+          ],
+          "ifc_export": {
+            "schema_version": "IFC4",
+            "file_size": "2.5 MB",
+            "elements_exported": 14,
+            "properties_included": true,
+            "geometry_included": true
+          },
+          "gltf_export": {
+            "file_size": "1.8 MB",
+            "textures": true,
+            "animations": false,
+            "compression": "draco"
+          },
+          "dxf_export": {
+            "file_size": "0.9 MB",
+            "layers": [
+              "Structure",
+              "Dimensions",
+              "Text"
+            ],
+            "version": "AutoCAD 2018"
+          }
+        }
+      },
+      "error": null
+    },
+    {
+      "test_name": "Error Handling",
+      "status": "PASSED",
+      "duration": 0.0024602413177490234,
+      "details": {
+        "error_tests": [
+          {
+            "endpoint": "/api/v1/invalid",
+            "expected_status": 404
+          },
+          {
+            "endpoint": "/api/v1/projects/nonexistent",
+            "expected_status": 404
+          }
+        ]
+      },
+      "error": null
+    }
+  ]
+}
