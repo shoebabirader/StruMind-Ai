@@ -17,10 +17,10 @@ class Settings(BaseSettings):
     APP_NAME: str = "StruMind"
     VERSION: str = "1.0.0"
     DEBUG: bool = Field(default=False, env="DEBUG")
-    SECRET_KEY: str = Field(..., env="SECRET_KEY")
+    SECRET_KEY: str = Field(default="dev-secret-key-change-in-production", env="SECRET_KEY")
     
     # Database
-    DATABASE_URL: str = Field(..., env="DATABASE_URL")
+    DATABASE_URL: str = Field(default="sqlite:///./strumind.db", env="DATABASE_URL")
     DATABASE_POOL_SIZE: int = Field(default=10, env="DATABASE_POOL_SIZE")
     DATABASE_MAX_OVERFLOW: int = Field(default=20, env="DATABASE_MAX_OVERFLOW")
     

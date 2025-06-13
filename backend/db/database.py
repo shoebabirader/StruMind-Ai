@@ -15,12 +15,21 @@ from core.config import get_settings
 settings = get_settings()
 
 # Create async engine
-async_engine = create_async_engine(
-    settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://"),
-    pool_size=settings.DATABASE_POOL_SIZE,
-    max_overflow=settings.DATABASE_MAX_OVERFLOW,
-    echo=settings.DEBUG,
-)
+database_url = settings.DATABASE_URL
+if database_url.startswith("postgresql://"):
+    database_url = database_url.replace("postgresql://", "postgresql+asyncpg://")
+elif database_url.startswith("sqlite:///"):
+    database_url = database_url.replace("sqlite:///", "sqlite+aiosqlite:///")
+
+# Configure engine parameters based on database type
+engine_kwargs = {"echo": settings.DEBUG}
+if not database_url.startswith("sqlite"):
+    engine_kwargs.update({
+        "pool_size": settings.DATABASE_POOL_SIZE,
+        "max_overflow": settings.DATABASE_MAX_OVERFLOW,
+    })
+
+async_engine = create_async_engine(database_url, **engine_kwargs)
 
 # Create sync engine for migrations
 sync_engine = create_engine(
