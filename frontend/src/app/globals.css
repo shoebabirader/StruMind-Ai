@@ -1,0 +1,181 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 222.2 84% 4.9%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 224.3 76.3% 94.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-md;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground;
+}
+
+/* Engineering-specific styles */
+.engineering-grid {
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.structural-element {
+  @apply transition-all duration-200 hover:shadow-lg;
+}
+
+.structural-element.selected {
+  @apply ring-2 ring-primary ring-offset-2;
+}
+
+.structural-element.beam {
+  @apply bg-steel-500;
+}
+
+.structural-element.column {
+  @apply bg-concrete-500;
+}
+
+.structural-element.slab {
+  @apply bg-concrete-300;
+}
+
+.structural-element.wall {
+  @apply bg-concrete-400;
+}
+
+/* 3D Viewer styles */
+.viewer-3d {
+  @apply relative overflow-hidden rounded-lg border;
+}
+
+.viewer-controls {
+  @apply absolute top-4 right-4 z-10 flex flex-col gap-2;
+}
+
+.viewer-toolbar {
+  @apply absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10;
+}
+
+/* Analysis result colors */
+.stress-compression {
+  @apply text-blue-600;
+}
+
+.stress-tension {
+  @apply text-red-600;
+}
+
+.stress-neutral {
+  @apply text-gray-600;
+}
+
+/* Loading animations */
+.loading-spinner {
+  @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary;
+}
+
+.loading-pulse {
+  @apply animate-pulse bg-muted;
+}
+
+/* Form styles */
+.form-section {
+  @apply space-y-4 p-4 border rounded-lg;
+}
+
+.form-grid {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+/* Table styles */
+.data-table {
+  @apply w-full border-collapse border border-border;
+}
+
+.data-table th {
+  @apply bg-muted p-2 text-left font-medium border border-border;
+}
+
+.data-table td {
+  @apply p-2 border border-border;
+}
+
+.data-table tr:hover {
+  @apply bg-muted/50;
+}
+
+/* Responsive utilities */
+@media (max-width: 768px) {
+  .mobile-hidden {
+    @apply hidden;
+  }
+  
+  .mobile-full {
+    @apply w-full;
+  }
+}
