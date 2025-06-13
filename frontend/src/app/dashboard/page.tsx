@@ -27,11 +27,14 @@ interface Project {
   name: string
   description: string
   status: 'draft' | 'active' | 'completed' | 'archived'
-  projectType: string
-  createdAt: string
-  updatedAt: string
-  memberCount: number
-  analysisCount: number
+  projectType?: string
+  project_type?: string
+  createdAt?: string
+  updatedAt?: string
+  created_at?: string
+  updated_at?: string
+  memberCount?: number
+  analysisCount?: number
   thumbnail?: string
 }
 
@@ -356,23 +359,23 @@ export default function DashboardPage() {
                       {project.status.charAt(0).toUpperCase() + project.status.slice(1)}
                     </Badge>
                     <span className="text-sm text-gray-500 capitalize">
-                      {project.projectType}
+                      {project.project_type || project.projectType}
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between text-sm text-gray-500">
                     <div className="flex items-center">
                       <Users className="h-4 w-4 mr-1" />
-                      {project.memberCount} members
+                      {project.memberCount || 1} members
                     </div>
                     <div className="flex items-center">
                       <Activity className="h-4 w-4 mr-1" />
-                      {project.analysisCount} analyses
+                      {project.analysisCount || 0} analyses
                     </div>
                   </div>
                   
                   <div className="mt-4 text-xs text-gray-400">
-                    Updated {new Date(project.updatedAt).toLocaleDateString()}
+                    Updated {new Date(project.updated_at || project.updatedAt).toLocaleDateString()}
                   </div>
                 </CardContent>
               </Card>

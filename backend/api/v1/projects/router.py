@@ -72,10 +72,16 @@ async def create_project(
     db: Session = Depends(get_db)
 ):
     """Create new project"""
-    # Get user's organization
+    # Get user's organization - this is required
     organization_id = None
     if current_user.organization_memberships:
         organization_id = str(current_user.organization_memberships[0].organization_id)
+    
+    if not organization_id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User must belong to an organization to create projects"
+        )
     
     project = Project(
         id=str(uuid.uuid4()),
@@ -179,8 +185,8 @@ async def get_project(
 ):
     """Get project by ID"""
     project = db.query(Project).filter(
-        Project.id == project_id,
-        Project.created_by_id == current_user.id
+        Project.id == str(project_id),
+        Project.created_by_id == str(current_user.id)
     ).first()
     
     if not project:
@@ -214,8 +220,8 @@ async def update_project(
 ):
     """Update project"""
     project = db.query(Project).filter(
-        Project.id == project_id,
-        Project.created_by_id == current_user.id
+        Project.id == str(project_id),
+        Project.created_by_id == str(current_user.id)
     ).first()
     
     if not project:
@@ -258,8 +264,8 @@ async def delete_project(
 ):
     """Delete project"""
     project = db.query(Project).filter(
-        Project.id == project_id,
-        Project.created_by_id == current_user.id
+        Project.id == str(project_id),
+        Project.created_by_id == str(current_user.id)
     ).first()
     
     if not project:

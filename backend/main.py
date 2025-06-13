@@ -17,7 +17,7 @@ from prometheus_client import make_asgi_app
 from api.v1.router import api_router
 from core.config import get_settings
 from core.exceptions import StrumindException
-from db.database import create_tables, get_database
+from db.database import create_tables
 
 
 # Configure structured logging
@@ -47,8 +47,12 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan manager"""
     logger.info("Starting StruMind Backend")
     
-    # Initialize database (temporarily disabled due to UUID/SQLite compatibility)
-    # await create_tables()
+    # Initialize database
+    try:
+        create_tables()
+        logger.info("Database tables created successfully")
+    except Exception as e:
+        logger.error("Failed to create database tables", error=str(e))
     
     # Initialize other services
     logger.info("Backend services initialized")
