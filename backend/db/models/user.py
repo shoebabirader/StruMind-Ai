@@ -81,7 +81,7 @@ class User(Base):
     
     __tablename__ = "users"
     
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=lambda: str(uuid.uuid4()))
     email = Column(String(255), unique=True, nullable=False, index=True)
     username = Column(String(50), unique=True, nullable=False, index=True)
     first_name = Column(String(100), nullable=False)
@@ -126,7 +126,7 @@ class Organization(Base):
     
     __tablename__ = "organizations"
     
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=lambda: str(uuid.uuid4()))
     name = Column(String(200), nullable=False)
     slug = Column(String(100), unique=True, nullable=False, index=True)
     description = Column(Text, nullable=True)
@@ -175,7 +175,7 @@ class OrganizationMember(Base):
     
     __tablename__ = "organization_members"
     
-    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    id = Column(GUID(), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Foreign Keys
     user_id = Column(GUID(), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

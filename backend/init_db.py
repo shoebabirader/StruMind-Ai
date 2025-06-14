@@ -7,13 +7,13 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from db.database import sync_engine, Base
+from db.database import engine, Base
 from db.models.user import User
 from db.models.project import Project
 from db.models.structural import *
 from db.models.analysis import *
-from db.models.design import *
-from db.models.bim import *
+# from db.models.design import *
+# from db.models.bim import *
 
 def init_database():
     """Initialize the database with all tables"""
@@ -21,7 +21,7 @@ def init_database():
     
     try:
         # Create all tables
-        Base.metadata.create_all(bind=sync_engine)
+        Base.metadata.create_all(bind=engine)
         print("✅ Database tables created successfully!")
         
         # Print created tables

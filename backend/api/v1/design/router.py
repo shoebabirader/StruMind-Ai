@@ -13,7 +13,8 @@ from db.models.design import DesignResult, DesignStatus, DesignCode
 from db.models.project import Project
 from db.models.user import User
 from api.v1.auth.router import get_current_user
-# from design.concrete import ConcreteDesigner  # Temporarily commented out
+# from design.steel.aisc_360 import AISC360SteelDesign  # Temporarily commented out
+# from design.concrete.is_456 import IS456ConcreteDesign  # Temporarily commented out
 from core.exceptions import ValidationError, NotFoundError
 
 router = APIRouter()

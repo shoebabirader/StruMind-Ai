@@ -13,7 +13,7 @@ from db.models.analysis import AnalysisCase, AnalysisType, AnalysisStatus
 from db.models.project import Project
 from db.models.user import User
 from api.v1.auth.router import get_current_user
-# from solver.solver_engine import SolverEngine  # Temporarily commented out
+from solver.solver_engine import SolverEngine, AnalysisManager
 from core.exceptions import ValidationError, NotFoundError
 
 router = APIRouter()
@@ -58,8 +58,8 @@ class AnalysisResultsResponse(BaseModel):
 def verify_project_access(project_id: UUID, current_user: User, db: Session):
     """Verify user has access to project"""
     project = db.query(Project).filter(
-        Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.id == str(project_id),
+        Project.created_by_id == str(current_user.id)
     ).first()
     
     if not project:
@@ -73,6 +73,74 @@ def verify_project_access(project_id: UUID, current_user: User, db: Session):
 async def analysis_health():
     """Analysis service health check"""
     return {"status": "healthy", "service": "analysis"}
+
+async def run_structural_analysis(analysis_id: UUID, db: Session):
+    """Background task to run structural analysis"""
+    analysis = db.query(AnalysisCase).filter(AnalysisCase.id == analysis_id).first()
+    if not analysis:
+        return
+    
+    try:
+        # Update status to running
+        analysis.status = AnalysisStatus.RUNNING
+        analysis.started_at = datetime.utcnow()
+        analysis.progress_percentage = 10.0
+        db.commit()
+        
+        # Get project structural data
+        from db.models.structural import Node, Element, Material, Section, Load, BoundaryCondition
+        
+        nodes = db.query(Node).filter(Node.project_id == analysis.project_id).all()
+        elements = db.query(Element).filter(Element.project_id == analysis.project_id).all()
+        materials = {m.id: m for m in db.query(Material).filter(Material.project_id == analysis.project_id).all()}
+        sections = {s.id: s for s in db.query(Section).filter(Section.project_id == analysis.project_id).all()}
+        loads = db.query(Load).filter(Load.project_id == analysis.project_id).all()
+        boundary_conditions = db.query(BoundaryCondition).filter(BoundaryCondition.project_id == analysis.project_id).all()
+        
+        analysis.progress_percentage = 30.0
+        db.commit()
+        
+        # Prepare structural data
+        structural_data = {
+            'nodes': nodes,
+            'elements': elements,
+            'materials': materials,
+            'sections': sections,
+            'loads': loads,
+            'boundary_conditions': boundary_conditions
+        }
+        
+        analysis.progress_percentage = 50.0
+        db.commit()
+        
+        # Run analysis using solver engine
+        solver_engine = SolverEngine()
+        results = await solver_engine.run_analysis(analysis, structural_data)
+        
+        analysis.progress_percentage = 90.0
+        db.commit()
+        
+        # Store results
+        analysis.solver_info = {
+            "results": results,
+            "summary": {
+                "total_nodes": len(nodes),
+                "total_elements": len(elements),
+                "max_displacement": results.get("solver_info", {}).get("max_displacement", 0.0),
+                "analysis_time": results.get("solver_info", {}).get("solve_time", 0.0)
+            }
+        }
+        
+        analysis.status = AnalysisStatus.COMPLETED
+        analysis.progress_percentage = 100.0
+        analysis.completed_at = datetime.utcnow()
+        
+    except Exception as e:
+        analysis.status = AnalysisStatus.FAILED
+        analysis.error_message = str(e)
+        analysis.completed_at = datetime.utcnow()
+    
+    db.commit()
 
 @router.post("/{project_id}/run", response_model=AnalysisResponse)
 async def run_analysis(
@@ -94,43 +162,15 @@ async def run_analysis(
         load_combination_ids=analysis_data.load_combinations,
         description=analysis_data.description,
         progress_percentage=0.0,
-        project_id=project_id
+        project_id=str(project_id)
     )
     
     db.add(analysis)
     db.commit()
     db.refresh(analysis)
     
-    # For now, simulate analysis completion
-    analysis.status = AnalysisStatus.COMPLETED
-    analysis.progress_percentage = 100.0
-    analysis.started_at = datetime.utcnow()
-    analysis.completed_at = datetime.utcnow()
-    
-    # Store results in solver_info for now (in real implementation, would be in separate results table)
-    if analysis_data.analysis_type == AnalysisType.LINEAR_STATIC:
-        analysis.solver_info = {
-            "results": {
-                "displacements": [0.001, 0.002, 0.0015, 0.0008],
-                "reactions": [1000, 1500, 800, 1200],
-                "element_forces": [{"element_id": "1", "axial": 500, "shear": 200, "moment": 1000}],
-                "max_displacement": 0.002,
-                "max_stress": 150.5
-            }
-        }
-    elif analysis_data.analysis_type == AnalysisType.MODAL:
-        analysis.solver_info = {
-            "results": {
-                "frequencies": [2.45, 3.67, 5.23, 7.89, 9.12],
-                "mode_shapes": [
-                    {"mode": 1, "frequency": 2.45, "participation": 0.85},
-                    {"mode": 2, "frequency": 3.67, "participation": 0.72}
-                ],
-                "mass_participation": {"x": 0.85, "y": 0.78, "z": 0.92}
-            }
-        }
-    
-    db.commit()
+    # Add background task to run analysis
+    background_tasks.add_task(run_structural_analysis, analysis.id, db)
     
     return AnalysisResponse(
         id=str(analysis.id),
@@ -139,7 +179,7 @@ async def run_analysis(
         parameters=analysis.parameters or {},
         load_combinations=analysis.load_combination_ids or [],
         description=analysis.description,
-        results=analysis.solver_info.get("results") if analysis.solver_info else None,
+        results=None,
         error_message=analysis.error_message,
         progress=analysis.progress_percentage,
         started_at=analysis.started_at,

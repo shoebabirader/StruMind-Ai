@@ -32,6 +32,7 @@ interface ModelViewer3DProps {
   showLabels?: boolean;
   deformedShape?: boolean;
   displacements?: Record<string, { x: number; y: number; z: number }>;
+  stresses?: Record<string, number>;
   onNodeSelect?: (nodeId: string) => void;
   onElementSelect?: (elementId: string) => void;
 }
@@ -80,24 +81,27 @@ const ElementComponent: React.FC<{
   isSelected: boolean;
   onClick: () => void;
   displacements?: Record<string, { x: number; y: number; z: number }>;
-}> = ({ element, startNode, endNode, isSelected, onClick, displacements }) => {
+  deformationScale?: number;
+  viewMode?: string;
+  stress?: number;
+}> = ({ element, startNode, endNode, isSelected, onClick, displacements, deformationScale = 1, viewMode = 'wireframe', stress }) => {
   const lineRef = useRef<any>(null);
   
   const startDisp = displacements?.[startNode.id];
   const startPos = startDisp 
     ? [
-        startNode.x + startDisp.x,
-        startNode.y + startDisp.y,
-        startNode.z + startDisp.z
+        startNode.x + startDisp.x * deformationScale,
+        startNode.y + startDisp.y * deformationScale,
+        startNode.z + startDisp.z * deformationScale
       ]
     : [startNode.x, startNode.y, startNode.z];
     
   const endDisp = displacements?.[endNode.id];
   const endPos = endDisp
     ? [
-        endNode.x + endDisp.x,
-        endNode.y + endDisp.y,
-        endNode.z + endDisp.z
+        endNode.x + endDisp.x * deformationScale,
+        endNode.y + endDisp.y * deformationScale,
+        endNode.z + endDisp.z * deformationScale
       ]
     : [endNode.x, endNode.y, endNode.z];
 
@@ -108,6 +112,21 @@ const ElementComponent: React.FC<{
 
   const getElementColor = () => {
     if (isSelected) return '#ff6b6b';
+    
+    // Stress-based coloring
+    if (viewMode === 'stress' && stress !== undefined) {
+      return getStressColor(stress);
+    }
+    
+    // Displacement-based coloring
+    if (viewMode === 'displacement' && (startDisp || endDisp)) {
+      const maxDisp = Math.max(
+        startDisp ? Math.sqrt(startDisp.x**2 + startDisp.y**2 + startDisp.z**2) : 0,
+        endDisp ? Math.sqrt(endDisp.x**2 + endDisp.y**2 + endDisp.z**2) : 0
+      );
+      return getDisplacementColor(maxDisp);
+    }
+    
     if (element.color) return element.color;
     
     switch (element.elementType) {
@@ -116,6 +135,28 @@ const ElementComponent: React.FC<{
       case 'brace': return '#feca57';
       default: return '#95a5a6';
     }
+  };
+
+  const getStressColor = (stress: number) => {
+    // Normalize stress to 0-1 range (assuming max stress of 250 MPa)
+    const normalized = Math.min(Math.abs(stress) / 250, 1);
+    
+    if (normalized < 0.2) return '#00ff00'; // Green - low stress
+    if (normalized < 0.4) return '#80ff00'; // Yellow-green
+    if (normalized < 0.6) return '#ffff00'; // Yellow
+    if (normalized < 0.8) return '#ff8000'; // Orange
+    return '#ff0000'; // Red - high stress
+  };
+
+  const getDisplacementColor = (displacement: number) => {
+    // Normalize displacement to 0-1 range (assuming max displacement of 0.01 m)
+    const normalized = Math.min(displacement / 0.01, 1);
+    
+    if (normalized < 0.2) return '#0000ff'; // Blue - low displacement
+    if (normalized < 0.4) return '#0080ff'; // Light blue
+    if (normalized < 0.6) return '#00ffff'; // Cyan
+    if (normalized < 0.8) return '#80ff80'; // Light green
+    return '#ff0000'; // Red - high displacement
   };
 
   return (
@@ -137,8 +178,11 @@ const ModelScene: React.FC<{
   onNodeSelect: (nodeId: string) => void;
   onElementSelect: (elementId: string) => void;
   displacements?: Record<string, { x: number; y: number; z: number }>;
+  stresses?: Record<string, number>;
   showGrid: boolean;
   showLabels: boolean;
+  deformationScale: number;
+  viewMode: string;
 }> = ({ 
   nodes, 
   elements, 
@@ -147,8 +191,11 @@ const ModelScene: React.FC<{
   onNodeSelect, 
   onElementSelect,
   displacements,
+  stresses,
   showGrid,
-  showLabels
+  showLabels,
+  deformationScale,
+  viewMode
 }) => {
   const { camera } = useThree();
   
@@ -216,7 +263,11 @@ const ModelScene: React.FC<{
           node={node}
           isSelected={selectedNodeId === node.id}
           onClick={() => onNodeSelect(node.id)}
-          {...(displacements?.[node.id] && { displacement: displacements[node.id] })}
+          displacement={displacements?.[node.id] ? {
+            x: displacements[node.id].x * deformationScale,
+            y: displacements[node.id].y * deformationScale,
+            z: displacements[node.id].z * deformationScale
+          } : undefined}
         />
       ))}
       
@@ -235,7 +286,10 @@ const ModelScene: React.FC<{
             endNode={endNode}
             isSelected={selectedElementId === element.id}
             onClick={() => onElementSelect(element.id)}
-            {...(displacements && { displacements })}
+            displacements={displacements}
+            deformationScale={deformationScale}
+            viewMode={viewMode}
+            stress={stresses?.[element.id]}
           />
         );
       })}
@@ -246,15 +300,21 @@ const ModelScene: React.FC<{
 const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   nodes,
   elements,
-  showGrid = true,
-  showLabels = true,
-  deformedShape = false,
+  showGrid: initialShowGrid = true,
+  showLabels: initialShowLabels = true,
+  deformedShape: initialDeformedShape = false,
   displacements,
+  stresses,
   onNodeSelect,
   onElementSelect
 }) => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedElementId, setSelectedElementId] = useState<string | null>(null);
+  const [showGrid, setShowGrid] = useState(initialShowGrid);
+  const [showLabels, setShowLabels] = useState(initialShowLabels);
+  const [deformedShape, setDeformedShape] = useState(initialDeformedShape);
+  const [deformationScale, setDeformationScale] = useState(10);
+  const [viewMode, setViewMode] = useState('wireframe');
 
   const handleNodeSelect = (nodeId: string) => {
     setSelectedNodeId(nodeId);
@@ -281,9 +341,12 @@ const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           selectedElementId={selectedElementId}
           onNodeSelect={handleNodeSelect}
           onElementSelect={handleElementSelect}
-          {...(deformedShape && displacements && { displacements })}
+          displacements={deformedShape ? displacements : undefined}
+          stresses={stresses}
           showGrid={showGrid}
           showLabels={showLabels}
+          deformationScale={deformationScale}
+          viewMode={viewMode}
         />
         <OrbitControls
           enablePan={true}
@@ -295,14 +358,14 @@ const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
       </Canvas>
       
       {/* Controls Panel */}
-      <div className="absolute top-4 left-4 bg-white p-4 rounded-lg shadow-lg">
+      <div className="absolute top-4 left-4 bg-white p-4 rounded-lg shadow-lg max-w-xs">
         <h3 className="font-semibold mb-2">View Controls</h3>
         <div className="space-y-2">
           <label className="flex items-center">
             <input
               type="checkbox"
               checked={showGrid}
-              onChange={() => {}}
+              onChange={(e) => setShowGrid(e.target.checked)}
               className="mr-2"
             />
             Show Grid
@@ -311,7 +374,7 @@ const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
             <input
               type="checkbox"
               checked={showLabels}
-              onChange={() => {}}
+              onChange={(e) => setShowLabels(e.target.checked)}
               className="mr-2"
             />
             Show Labels
@@ -320,11 +383,41 @@ const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
             <input
               type="checkbox"
               checked={deformedShape}
-              onChange={() => {}}
+              onChange={(e) => setDeformedShape(e.target.checked)}
               className="mr-2"
             />
             Deformed Shape
           </label>
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-1">
+              Deformation Scale
+            </label>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value={deformationScale}
+              onChange={(e) => setDeformationScale(Number(e.target.value))}
+              className="w-full"
+              disabled={!deformedShape}
+            />
+            <span className="text-xs text-gray-500">{deformationScale}x</span>
+          </div>
+          <div className="mt-4">
+            <label className="block text-sm font-medium mb-1">
+              View Mode
+            </label>
+            <select
+              value={viewMode}
+              onChange={(e) => setViewMode(e.target.value)}
+              className="w-full p-1 border rounded"
+            >
+              <option value="wireframe">Wireframe</option>
+              <option value="solid">Solid</option>
+              <option value="stress">Stress Contour</option>
+              <option value="displacement">Displacement Contour</option>
+            </select>
+          </div>
         </div>
       </div>
       

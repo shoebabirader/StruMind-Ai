@@ -60,7 +60,7 @@ class Project(Base):
     
     __tablename__ = "projects"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Basic Information
     name = Column(String(200), nullable=False)
@@ -144,7 +144,7 @@ class ProjectMember(Base):
     
     __tablename__ = "project_members"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Foreign Keys
     user_id = Column(String(36), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

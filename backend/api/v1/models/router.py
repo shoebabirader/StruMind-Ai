@@ -88,7 +88,7 @@ class SectionResponse(BaseModel):
     name: str
     section_type: str
     properties: Dict[str, Any]
-    standard: Optional[str]
+    designation: Optional[str]
     project_id: str
     created_at: datetime
 
@@ -134,8 +134,8 @@ class ModelSummary(BaseModel):
 def verify_project_access(project_id: UUID, current_user: User, db: Session):
     """Verify user has access to project"""
     project = db.query(Project).filter(
-        Project.id == project_id,
-        Project.owner_id == current_user.id
+        Project.id == str(project_id),
+        Project.created_by_id == str(current_user.id)
     ).first()
     
     if not project:
@@ -161,12 +161,17 @@ async def create_node(
     """Create new node in project"""
     project = verify_project_access(project_id, current_user, db)
     
+    # Get next node_id for this project
+    max_node_id = db.query(Node).filter(Node.project_id == str(project_id)).count()
+    next_node_id = max_node_id + 1
+    
     node = Node(
+        node_id=next_node_id,
         x=node_data.x,
         y=node_data.y,
         z=node_data.z,
         label=node_data.label,
-        project_id=project_id
+        project_id=str(project_id)
     )
     
     db.add(node)
@@ -258,7 +263,7 @@ async def create_element(
     # Validate nodes exist
     start_node = db.query(Node).filter(
         Node.id == element_data.start_node_id,
-        Node.project_id == project_id
+        Node.project_id == str(project_id)
     ).first()
     
     if not start_node:
@@ -271,7 +276,7 @@ async def create_element(
     if element_data.end_node_id:
         end_node = db.query(Node).filter(
             Node.id == element_data.end_node_id,
-            Node.project_id == project_id
+            Node.project_id == str(project_id)
         ).first()
         
         if not end_node:
@@ -289,7 +294,7 @@ async def create_element(
         orientation_angle=element_data.orientation_angle,
         properties=element_data.properties,
         label=element_data.label,
-        project_id=project_id
+        project_id=str(project_id)
     )
     
     db.add(element)
@@ -349,13 +354,25 @@ async def create_material(
     """Create new material in project"""
     project = verify_project_access(project_id, current_user, db)
     
+    # Extract properties from the properties dict
+    props = material_data.properties or {}
+    
     material = Material(
         name=material_data.name,
         material_type=material_data.material_type,
         properties=material_data.properties,
         grade=material_data.grade,
         standard=material_data.standard,
-        project_id=project_id
+        # Extract individual properties
+        elastic_modulus=props.get('elastic_modulus', 200e9),
+        poisson_ratio=props.get('poisson_ratio', 0.3),
+        density=props.get('density', 7850),
+        yield_strength=props.get('yield_strength'),
+        ultimate_strength=props.get('ultimate_strength'),
+        compressive_strength=props.get('compressive_strength'),
+        thermal_expansion=props.get('thermal_expansion'),
+        thermal_conductivity=props.get('thermal_conductivity'),
+        project_id=str(project_id)
     )
     
     db.add(material)
@@ -409,12 +426,21 @@ async def create_section(
     """Create new section in project"""
     project = verify_project_access(project_id, current_user, db)
     
+    # Extract properties from the properties dict
+    props = section_data.properties or {}
+    
     section = Section(
         name=section_data.name,
         section_type=section_data.section_type,
         properties=section_data.properties,
-        standard=section_data.standard,
-        project_id=project_id
+        designation=getattr(section_data, 'designation', None),
+        # Extract individual properties
+        area=props.get('area', 0.001),
+        moment_inertia_y=props.get('moment_of_inertia_y', props.get('moment_of_inertia_x', 1e-6)),
+        moment_inertia_z=props.get('moment_of_inertia_z', props.get('moment_of_inertia_y', 1e-6)),
+        moment_inertia_x=props.get('torsional_constant'),
+        dimensions=props.get('dimensions', {}),
+        project_id=str(project_id)
     )
     
     db.add(section)
@@ -426,7 +452,7 @@ async def create_section(
         name=section.name,
         section_type=section.section_type,
         properties=section.properties,
-        standard=section.standard,
+        designation=section.designation,
         project_id=str(section.project_id),
         created_at=section.created_at
     )
@@ -448,7 +474,7 @@ async def list_sections(
             name=section.name,
             section_type=section.section_type,
             properties=section.properties,
-            standard=section.standard,
+            designation=section.designation,
             project_id=str(section.project_id),
             created_at=section.created_at
         )
@@ -472,7 +498,7 @@ async def create_load(
         values=load_data.values,
         element_id=UUID(load_data.element_id) if load_data.element_id else None,
         node_id=UUID(load_data.node_id) if load_data.node_id else None,
-        project_id=project_id
+        project_id=str(project_id)
     )
     
     db.add(load)
@@ -530,7 +556,7 @@ async def create_boundary_condition(
         node_id=UUID(bc_data.node_id),
         support_type=bc_data.support_type,
         restraints=bc_data.restraints,
-        project_id=project_id
+        project_id=str(project_id)
     )
     
     db.add(boundary_condition)

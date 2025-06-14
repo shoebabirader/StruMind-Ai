@@ -273,6 +273,55 @@ class StiffnessMatrixAssembler:
         return K_global.tocsr(), self.dof_manager
 
 
+class GlobalStiffnessMatrix:
+    """Global stiffness matrix container and operations"""
+    
+    def __init__(self, matrix: csr_matrix, dof_manager: DOFManager):
+        self.matrix = matrix
+        self.dof_manager = dof_manager
+        self.size = matrix.shape[0]
+    
+    def apply_boundary_conditions(self, boundary_conditions: List[Any]) -> Tuple[csr_matrix, np.ndarray]:
+        """Apply boundary conditions and return reduced system"""
+        # Apply boundary conditions from the list
+        for bc in boundary_conditions:
+            node_dofs = self.dof_manager.node_dof_map.get(bc.node_id, [])
+            
+            # Apply restraints
+            restraints = [bc.restraint_x, bc.restraint_y, bc.restraint_z,
+                         bc.restraint_xx, bc.restraint_yy, bc.restraint_zz]
+            
+            for i, is_restrained in enumerate(restraints):
+                if is_restrained and i < len(node_dofs):
+                    self.dof_manager.constrained_dofs.add(node_dofs[i])
+        
+        # Finalize DOF mapping
+        self.dof_manager.finalize_dof_mapping()
+        
+        # Extract free DOFs
+        free_dofs = self.dof_manager.free_dofs
+        
+        # Reduce stiffness matrix
+        K_reduced = self.matrix[np.ix_(free_dofs, free_dofs)]
+        
+        return K_reduced, np.array(free_dofs)
+    
+    def get_full_matrix(self) -> csr_matrix:
+        """Get the full global stiffness matrix"""
+        return self.matrix
+    
+    def get_matrix_info(self) -> Dict[str, Any]:
+        """Get matrix information"""
+        return {
+            'size': self.size,
+            'nnz': self.matrix.nnz,
+            'density': self.matrix.nnz / (self.size * self.size),
+            'total_dofs': self.dof_manager.total_dofs,
+            'free_dofs': len(self.dof_manager.free_dofs),
+            'constrained_dofs': len(self.dof_manager.constrained_dofs)
+        }
+
+
 class MassMatrixAssembler:
     """Assembler for global mass matrix"""
     

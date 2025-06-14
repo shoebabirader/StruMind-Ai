@@ -97,7 +97,7 @@ class Node(Base):
     
     __tablename__ = "nodes"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Node identification
     node_id = Column(Integer, nullable=False)  # User-defined node number
@@ -135,7 +135,7 @@ class Material(Base):
     
     __tablename__ = "materials"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Material identification
     name = Column(String(100), nullable=False)
@@ -185,7 +185,7 @@ class Section(Base):
     
     __tablename__ = "sections"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Section identification
     name = Column(String(100), nullable=False)
@@ -238,7 +238,7 @@ class Element(Base):
     
     __tablename__ = "elements"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Element identification
     element_id = Column(Integer, nullable=False)  # User-defined element number
@@ -288,7 +288,7 @@ class LoadCase(Base):
     
     __tablename__ = "load_cases"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Load case identification
     name = Column(String(100), nullable=False)
@@ -319,7 +319,7 @@ class Load(Base):
     
     __tablename__ = "loads"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Load identification
     name = Column(String(100), nullable=True)
@@ -363,7 +363,7 @@ class LoadCombination(Base):
     
     __tablename__ = "load_combinations"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Combination identification
     name = Column(String(100), nullable=False)
@@ -396,7 +396,7 @@ class BoundaryCondition(Base):
     
     __tablename__ = "boundary_conditions"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Boundary condition identification
     name = Column(String(100), nullable=True)
@@ -442,7 +442,7 @@ class Release(Base):
     
     __tablename__ = "releases"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Release identification
     name = Column(String(100), nullable=True)

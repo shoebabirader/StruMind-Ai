@@ -96,7 +96,7 @@ class DesignCase(Base):
     
     __tablename__ = "design_cases"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Design identification
     name = Column(String(100), nullable=False)
@@ -163,7 +163,7 @@ class DesignResult(Base):
     
     __tablename__ = "design_results"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Design result identification
     result_name = Column(String(100), nullable=False)
@@ -243,7 +243,7 @@ class ReinforcementDetail(Base):
     
     __tablename__ = "reinforcement_details"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Reinforcement identification
     rebar_type = Column(SQLEnum(RebarType), nullable=False)
@@ -304,7 +304,7 @@ class ConnectionDetail(Base):
     
     __tablename__ = "connection_details"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Connection identification
     connection_type = Column(SQLEnum(ConnectionType), nullable=False)

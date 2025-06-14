@@ -6,8 +6,8 @@ import numpy as np
 from typing import Dict, List, Tuple
 import logging
 
-from ...core.modeling.model import StructuralModel
-from ...core.modeling.loads import LoadCase, NodalLoad, ElementLoad
+from core.modeling.model import StructuralModel
+from core.modeling.loads import LoadCase, NodalLoad, ElementLoad
 
 logger = logging.getLogger(__name__)
 

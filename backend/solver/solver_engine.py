@@ -11,10 +11,7 @@ from datetime import datetime
 from db.models.structural import Node, Element, Material, Section, Load, LoadCase, BoundaryCondition
 from db.models.analysis import AnalysisCase, AnalysisType, AnalysisStatus
 from core.exceptions import AnalysisError, ComputationError
-from .linear import LinearStaticAnalysis
-from .dynamic import DynamicSolver
-from .nonlinear import NonlinearStaticAnalysis
-from .buckling import BucklingAnalysis
+from .simple_solver import LinearStaticAnalysis, DynamicSolver, NonlinearStaticAnalysis, BucklingAnalysis
 
 
 class SolverEngine:

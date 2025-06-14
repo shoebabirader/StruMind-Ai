@@ -9,9 +9,9 @@ from typing import Dict, List, Tuple, Optional
 import logging
 
 from ..matrix import GlobalStiffnessMatrix
-from ...core.modeling.model import StructuralModel
-from ...core.modeling.loads import LoadCase
-from ...core.modeling.boundary_conditions import BoundaryCondition
+from core.modeling.model import StructuralModel
+from core.modeling.loads import LoadCase
+from core.modeling.boundary_conditions import BoundaryCondition
 
 logger = logging.getLogger(__name__)
 

@@ -10,9 +10,9 @@ from typing import Dict, List, Tuple, Optional
 import logging
 
 from ..linear.linear_solver import LinearSolver
-from ...core.modeling.model import StructuralModel
-from ...core.modeling.loads import LoadCase
-from ...core.modeling.boundary_conditions import BoundaryCondition
+from core.modeling.model import StructuralModel
+from core.modeling.loads import LoadCase
+from core.modeling.boundary_conditions import BoundaryCondition
 
 logger = logging.getLogger(__name__)
 

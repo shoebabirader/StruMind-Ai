@@ -1,0 +1,122 @@
+[
+  {
+    "test": "Health Endpoint",
+    "status": "PASS",
+    "details": "Main health endpoint responding",
+    "timestamp": 1749923853.7920628
+  },
+  {
+    "test": "API v1 Health",
+    "status": "PASS",
+    "details": "Found 7 endpoints",
+    "timestamp": 1749923853.7935693
+  },
+  {
+    "test": "User Registration",
+    "status": "PASS",
+    "details": "User registered successfully",
+    "timestamp": 1749923854.17899
+  },
+  {
+    "test": "User Login",
+    "status": "PASS",
+    "details": "Login successful, token received",
+    "timestamp": 1749923854.433185
+  },
+  {
+    "test": "Project Creation",
+    "status": "PASS",
+    "details": "Project created with ID: e8d6bae6-e1aa-40b4-bcb2-6592e5064241",
+    "timestamp": 1749923854.4524157
+  },
+  {
+    "test": "Project Listing",
+    "status": "PASS",
+    "details": "Found 1 projects",
+    "timestamp": 1749923854.461832
+  },
+  {
+    "test": "Project Details",
+    "status": "PASS",
+    "details": "Project details retrieved correctly",
+    "timestamp": 1749923854.4659507
+  },
+  {
+    "test": "Node Creation",
+    "status": "PASS",
+    "details": "Created 4 nodes",
+    "timestamp": 1749923854.525811
+  },
+  {
+    "test": "Material Creation",
+    "status": "PASS",
+    "details": "Material created with ID: 0159de2e-356a-4029-ba65-614373e55ac7",
+    "timestamp": 1749923854.541937
+  },
+  {
+    "test": "Section Creation",
+    "status": "PASS",
+    "details": "Section created with ID: 28d51324-15cc-4f84-94f7-295c1d65c38d",
+    "timestamp": 1749923854.5586767
+  },
+  {
+    "test": "Element Creation",
+    "status": "FAIL",
+    "details": "Status: 404",
+    "timestamp": 1749923854.563014
+  },
+  {
+    "test": "Analysis Health",
+    "status": "PASS",
+    "details": "Analysis service responding",
+    "timestamp": 1749923854.5643556
+  },
+  {
+    "test": "Linear Static Analysis",
+    "status": "PASS",
+    "details": "Analysis started with ID: 5de7a6df-a541-4ca9-981a-674f0df11da3",
+    "timestamp": 1749923854.605399
+  },
+  {
+    "test": "Analysis Status Check",
+    "status": "FAIL",
+    "details": "No analyses found",
+    "timestamp": 1749923856.6139617
+  },
+  {
+    "test": "File Upload",
+    "status": "PASS",
+    "details": "File uploaded with ID: 46477380-f4f4-43c8-8344-8bb133b8dda2",
+    "timestamp": 1749923856.6177459
+  },
+  {
+    "test": "File Listing",
+    "status": "PASS",
+    "details": "Found 1 files",
+    "timestamp": 1749923856.6205661
+  },
+  {
+    "test": "File Download",
+    "status": "PASS",
+    "details": "File downloaded correctly",
+    "timestamp": 1749923856.6237478
+  },
+  {
+    "test": "PDF Export",
+    "status": "PASS",
+    "details": "PDF exported successfully (7363 bytes)",
+    "timestamp": 1749923856.7377474
+  },
+  {
+    "test": "DXF Export",
+    "status": "PASS",
+    "details": "DXF exported successfully (16195 bytes)",
+    "timestamp": 1749923856.9674845
+  },
+  {
+    "test": "Design Health",
+    "status": "PASS",
+    "details": "Design service responding",
+    "timestamp": 1749923856.9690773
+  }
+]

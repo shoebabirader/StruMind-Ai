@@ -10,6 +10,7 @@ from .models.router import router as models_router
 from .analysis.router import router as analysis_router
 from .design.router import router as design_router
 from .results.router import router as results_router
+from .files.router import router as files_router
 
 api_router = APIRouter()
 
@@ -26,7 +27,8 @@ async def api_health():
             "models": "/api/v1/models",
             "analysis": "/api/v1/analysis",
             "design": "/api/v1/design",
-            "results": "/api/v1/results"
+            "results": "/api/v1/results",
+            "files": "/api/v1/files"
         }
     }
 
@@ -65,4 +67,10 @@ api_router.include_router(
     results_router,
     prefix="/results",
     tags=["Results & Visualization"]
+)
+
+api_router.include_router(
+    files_router,
+    prefix="/files",
+    tags=["File Management"]
 )

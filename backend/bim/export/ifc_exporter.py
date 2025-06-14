@@ -7,11 +7,11 @@ from datetime import datetime
 from typing import Dict, List, Optional
 import logging
 
-from ...core.modeling.model import StructuralModel
-from ...core.modeling.nodes import Node
-from ...core.modeling.elements import Element
-from ...core.modeling.materials import Material
-from ...core.modeling.sections import Section
+from core.modeling.model import StructuralModel
+from core.modeling.nodes import Node
+from core.modeling.elements import Element
+from core.modeling.materials import Material
+from core.modeling.sections import Section
 
 logger = logging.getLogger(__name__)
 

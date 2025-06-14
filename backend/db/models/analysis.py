@@ -62,7 +62,7 @@ class AnalysisCase(Base):
     
     __tablename__ = "analysis_cases"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Analysis identification
     name = Column(String(100), nullable=False)
@@ -122,7 +122,7 @@ class AnalysisResult(Base):
     
     __tablename__ = "analysis_results"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Result identification
     result_name = Column(String(100), nullable=False)
@@ -166,7 +166,7 @@ class NodeResult(Base):
     
     __tablename__ = "node_results"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Displacement results
     displacement_x = Column(Float, nullable=True)
@@ -204,7 +204,7 @@ class ElementResult(Base):
     
     __tablename__ = "element_results"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Position along element (0.0 to 1.0)
     position = Column(Float, default=0.0, nullable=False)
@@ -258,7 +258,7 @@ class ModalResult(Base):
     
     __tablename__ = "modal_results"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Modal properties
     mode_number = Column(Integer, nullable=False)

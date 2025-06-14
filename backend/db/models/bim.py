@@ -67,7 +67,7 @@ class BIMModel(Base):
     
     __tablename__ = "bim_models"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Model identification
     name = Column(String(200), nullable=False)
@@ -150,7 +150,7 @@ class BIMElement(Base):
     
     __tablename__ = "bim_elements"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Element identification
     global_id = Column(String(100), nullable=False)  # IFC GlobalId or similar
@@ -240,7 +240,7 @@ class BIMProperty(Base):
     
     __tablename__ = "bim_properties"
     
-    id = Column(String(36), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     
     # Property identification
     property_set_name = Column(String(100), nullable=False)  # e.g., "Pset_BeamCommon"

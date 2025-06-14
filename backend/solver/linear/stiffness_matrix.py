@@ -7,8 +7,8 @@ from scipy.sparse import csc_matrix, lil_matrix
 from typing import Dict, List, Tuple
 import logging
 
-from ...core.modeling.model import StructuralModel
-from ...core.modeling.elements import Element
+from core.modeling.model import StructuralModel
+from core.modeling.elements import Element
 
 logger = logging.getLogger(__name__)
 
