@@ -1,0 +1,77 @@
+{
+  "timestamp": "20250617_124013",
+  "success": true,
+  "project_data": {
+    "name": "5-Story RC Commercial Building",
+    "description": "Complete structural design of a 5-story reinforced concrete commercial building with 3x3 bay grid layout",
+    "type": "Reinforced Concrete",
+    "location": "Downtown Business District",
+    "client": "ABC Development Corporation",
+    "stories": 5,
+    "bay_layout": "3x3",
+    "floor_height": 3.0,
+    "beam_span": 6.0,
+    "column_size": "300x500",
+    "beam_size": "230x450",
+    "slab_thickness": 150
+  },
+  "loads": {
+    "dead_load": {
+      "slab": 3.75,
+      "beam": 25.0,
+      "column": 25.0
+    },
+    "live_load": {
+      "office": 3.0,
+      "corridor": 4.0,
+      "roof": 1.5
+    },
+    "wind_load": {
+      "basic_wind_speed": 44,
+      "terrain_category": 2,
+      "structure_class": "B"
+    },
+    "seismic": {
+      "zone_factor": 0.24,
+      "importance_factor": 1.2,
+      "response_reduction": 5.0
+    }
+  },
+  "video_path": "videos/5story-building-demo-20250617_124013.webm",
+  "frontend_url": "http://localhost:12001",
+  "backend_url": "http://localhost:8000",
+  "workflow_steps": [
+    "Application launch and sign-in",
+    "5-story project creation",
+    "Structural modeling (3x3 bay grid)",
+    "Material properties (M25 concrete, Fe415 steel)",
+    "Section properties (columns, beams, slabs)",
+    "Load application (dead, live, wind, seismic)",
+    "Structural analysis (linear, modal, response spectrum)",
+    "Results visualization",
+    "RC design checks (IS 456:2000)",
+    "Report generation",
+    "Final review"
+  ],
+  "building_specifications": {
+    "stories": 5,
+    "bay_layout": "3x3",
+    "total_nodes": 96,
+    "total_elements": "~200",
+    "analysis_types": [
+      "Linear Static",
+      "Modal",
+      "Response Spectrum",
+      "P-Delta"
+    ],
+    "design_codes": [
+      "IS 456:2000"
+    ],
+    "load_cases": [
+      "Dead Load",
+      "Live Load",
+      "Wind Load",
+      "Seismic Load"
+    ]
+  }
+}
