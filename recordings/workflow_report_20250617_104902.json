@@ -1,0 +1,19 @@
+{
+  "timestamp": "20250617_104902",
+  "success": true,
+  "video_path": "./videos/complete_workflow_20250617_104902.webm",
+  "frontend_url": "http://localhost:12001",
+  "backend_url": "http://localhost:8000",
+  "demo_user": "demo@strumind.com",
+  "test_duration": "~60 seconds",
+  "steps_completed": [
+    "Backend health check",
+    "API endpoint validation",
+    "Homepage navigation",
+    "Login process",
+    "Dashboard access",
+    "Project creation",
+    "Project navigation",
+    "Workflow completion"
+  ]
+}
