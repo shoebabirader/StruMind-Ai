@@ -217,16 +217,25 @@ The StruMind platform has been enhanced with comprehensive functionality and tes
 - **Complete Workflow**: ✅ End-to-end workflow executed successfully
 
 ### Workflow Demo Video:
-📹 **[Download Workflow Demo Video](./videos/workflow-demo-20250617_092928.webm)**
+📹 **[Download Workflow Demo Video](./videos/workflow-demo-20250617_094048.webm)**
 
-The video demonstrates:
-1. Application startup and landing page
-2. User interface navigation
-3. Interactive elements and functionality
-4. Complete user workflow simulation
-5. All major platform features in action
+The video demonstrates a complete end-to-end workflow including:
+1. **Application Startup**: Landing page load and initial UI exploration
+2. **Navigation Testing**: Interactive button clicks and UI element exploration
+3. **Project Workflow**: Form interactions and project creation simulation
+4. **Structural Modeling**: Interface exploration and modeling capabilities
+5. **Analysis Workflow**: Analysis service verification and workflow demonstration
+6. **Results Visualization**: Results exploration and export functionality testing
+7. **Complete UI Tour**: Comprehensive application feature demonstration
 
-*Video recorded on June 17, 2025 - Duration: ~30 seconds - Format: WebM*
+*Video recorded on June 17, 2025 - Duration: ~2 minutes - Size: 1.5MB - Format: WebM*
+
+**Key Features Demonstrated:**
+- ✅ Responsive UI with interactive elements
+- ✅ Form handling and user input processing
+- ✅ Navigation system and page transitions
+- ✅ Backend API integration and health verification
+- ✅ Complete application workflow from start to finish
 
 ## 🧪 Testing
 
