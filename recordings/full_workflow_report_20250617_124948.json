@@ -1,0 +1,69 @@
+{
+  "timestamp": "20250617_124948",
+  "success": true,
+  "demo_type": "Full Workflow Demo",
+  "project_data": {
+    "name": "5-Story RC Commercial Building",
+    "description": "Complete structural design of a 5-story reinforced concrete commercial building",
+    "type": "commercial",
+    "location": "Downtown Business District",
+    "client": "ABC Development Corporation"
+  },
+  "video_path": "videos/full-strumind-workflow-20250617_124948.webm",
+  "frontend_url": "http://localhost:12001",
+  "backend_url": "http://localhost:8000",
+  "workflow_steps": [
+    "Application launch and navigation",
+    "User sign-in authentication",
+    "5-story project creation with full details",
+    "3D structural modeling with interactive tools",
+    "Material properties definition (M25 concrete, Fe415 steel)",
+    "Section properties (300x500mm columns, 230x450mm beams, 150mm slabs)",
+    "Comprehensive load application (dead, live, wind, seismic)",
+    "Multi-type structural analysis (linear, modal, response spectrum, P-Delta)",
+    "Interactive results visualization and review",
+    "RC design checks per IS 456:2000 with automated verification",
+    "Professional report generation and export capabilities",
+    "Final project review and summary"
+  ],
+  "features_demonstrated": [
+    "Complete user authentication flow",
+    "Project creation and management",
+    "3D structural modeling interface",
+    "Material and section property definition",
+    "Comprehensive load application",
+    "Multi-physics structural analysis",
+    "Interactive results visualization",
+    "Automated design checks",
+    "Professional report generation",
+    "Export and documentation capabilities"
+  ],
+  "building_specifications": {
+    "type": "5-story reinforced concrete commercial building",
+    "stories": 5,
+    "bay_layout": "3x3 grid",
+    "total_nodes": 96,
+    "materials": {
+      "concrete": "M25 grade (25 N/mm\u00b2)",
+      "steel": "Fe415 grade (415 N/mm\u00b2)"
+    },
+    "sections": {
+      "columns": "300x500 mm",
+      "beams": "230x450 mm",
+      "slabs": "150 mm thick"
+    },
+    "loads": {
+      "dead_load": "3.75 kN/m\u00b2",
+      "live_load": "3.0 kN/m\u00b2",
+      "wind_speed": "44 m/s",
+      "seismic_zone": "Zone IV (0.24)"
+    },
+    "analysis_types": [
+      "Linear Static Analysis",
+      "Modal Analysis",
+      "Response Spectrum Analysis",
+      "P-Delta Analysis"
+    ],
+    "design_code": "IS 456:2000"
+  }
+}
