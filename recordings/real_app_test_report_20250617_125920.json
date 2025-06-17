@@ -1,0 +1,21 @@
+{
+  "timestamp": "20250617_125920",
+  "test_results": {
+    "backend_health": true,
+    "frontend_health": true,
+    "user_registration": true,
+    "user_login": true,
+    "project_creation": true,
+    "model_creation": true,
+    "analysis_execution": false,
+    "design_execution": false,
+    "results_retrieval": false,
+    "export_functionality": false
+  },
+  "success_rate": 60.0,
+  "backend_url": "http://localhost:8000",
+  "frontend_url": "http://localhost:12001",
+  "video_path": "videos/real-app-test-20250617_125920.webm",
+  "test_user": "test_20250617_125920@strumind.com",
+  "project_id": "8474b3e0-70c9-4d01-9e54-26ffb1ce65a6"
+}

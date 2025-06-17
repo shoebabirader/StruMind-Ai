@@ -1,0 +1,53 @@
+{
+  "timestamp": "20250617_130520",
+  "demo_type": "Final 5-Story Building Demo",
+  "success_rate": 100.0,
+  "demo_results": {
+    "backend_verified": true,
+    "frontend_verified": true,
+    "api_tested": true,
+    "model_created": true,
+    "video_recorded": true,
+    "demo_completed": true
+  },
+  "building_config": {
+    "name": "5-Story RC Building Demo",
+    "stories": 5,
+    "bays_x": 3,
+    "bays_y": 3,
+    "bay_width": 6.0,
+    "bay_depth": 6.0,
+    "floor_height": 3.0,
+    "column_size": {
+      "width": 300,
+      "depth": 500
+    },
+    "beam_size": {
+      "width": 230,
+      "depth": 450
+    },
+    "slab_thickness": 150,
+    "concrete_grade": "M25",
+    "steel_grade": "Fe415"
+  },
+  "model_statistics": {
+    "nodes": 96,
+    "elements": 200,
+    "columns": 80,
+    "beams": 120,
+    "load_cases": 4,
+    "load_combinations": 5
+  },
+  "video_path": "videos/final-5story-demo-20250617_130520.webm",
+  "frontend_url": "http://localhost:12001",
+  "backend_url": "http://localhost:8000",
+  "features_demonstrated": [
+    "Complete 5-story building model creation",
+    "Structural element definition (columns, beams)",
+    "Material and section properties",
+    "Load case and combination setup",
+    "Frontend interface navigation",
+    "Professional workflow demonstration",
+    "Industry-standard building design process"
+  ]
+}
