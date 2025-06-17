@@ -1,0 +1,43 @@
+{
+  "timestamp": "20250617_102757",
+  "total_parts": 5,
+  "successful_parts": 5,
+  "failed_parts": 0,
+  "parts": [
+    {
+      "part_number": 1,
+      "name": "User Login & Authentication",
+      "script": "part_1_login_demo.py",
+      "description": "Demonstrates user login and dashboard access",
+      "status": "SUCCESS"
+    },
+    {
+      "part_number": 2,
+      "name": "Project Creation & Model Setup",
+      "script": "part_2_project_creation.py",
+      "description": "Shows project creation and structural model setup",
+      "status": "SUCCESS"
+    },
+    {
+      "part_number": 3,
+      "name": "Structural Analysis",
+      "script": "part_3_structural_analysis.py",
+      "description": "Demonstrates analysis execution and results viewing",
+      "status": "SUCCESS"
+    },
+    {
+      "part_number": 4,
+      "name": "Design Optimization",
+      "script": "part_4_design_optimization.py",
+      "description": "Shows design optimization and code compliance",
+      "status": "SUCCESS"
+    },
+    {
+      "part_number": 5,
+      "name": "Export & Reporting",
+      "script": "part_5_export_reporting.py",
+      "description": "Demonstrates final export and project completion",
+      "status": "SUCCESS"
+    }
+  ]
+}

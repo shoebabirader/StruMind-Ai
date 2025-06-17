@@ -1,0 +1,224 @@
+[
+  {
+    "url": "http://localhost:12001/",
+    "method": "GET",
+    "headers": {
+      "upgrade-insecure-requests": "1",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": "\"Linux\""
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/media/e4af272ccee01ff0-s.p.woff2",
+    "method": "GET",
+    "headers": {
+      "origin": "http://localhost:12001",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/css/app/layout.css?v=1750155580091",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/webpack.js?v=1750155580091",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/main-app.js?v=1750155580091",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/app-pages-internals.js",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/app/page.js",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/auth/login?_rsc=1wtp7",
+    "method": "GET",
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2C%22%2F%22%2C%22refresh%22%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/auth/login?_rsc=6y222",
+    "method": "GET",
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22auth%22%2C%7B%22children%22%3A%5B%22login%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2C%22%2Fauth%2Flogin%22%2C%22refresh%22%5D%7D%5D%7D%2Cnull%2C%22refetch%22%5D%7D%5D"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/app/auth/login/page.js",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/api/v1/auth/login",
+    "method": "POST",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/auth/login",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": "{\"email\":\"demo@strumind.com\",\"password\":\"DemoPassword123!\"}"
+  },
+  {
+    "url": "http://localhost:12001/dashboard?_rsc=1pz1r",
+    "method": "GET",
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/auth/login",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-prefetch": "1",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22auth%22%2C%7B%22children%22%3A%5B%22login%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2C%22%2Fauth%2Flogin%22%2C%22refresh%22%5D%7D%5D%7D%5D%7D%2Cnull%2Cnull%2Ctrue%5D",
+      "next-url": "/auth/login",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/dashboard?_rsc=3y0gy",
+    "method": "GET",
+    "headers": {
+      "rsc": "1",
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/auth/login",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0",
+      "next-router-state-tree": "%5B%22%22%2C%7B%22children%22%3A%5B%22dashboard%22%2C%7B%22children%22%3A%5B%22__PAGE__%22%2C%7B%7D%2C%22%2Fdashboard%22%2C%22refresh%22%5D%7D%2Cnull%2C%22refetch%22%5D%7D%5D"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/_next/static/chunks/app/dashboard/page.js",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/auth/login",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "https://work-1-tgaufxkwcjeifuoc.prod-runtime.all-hands.dev/api/v1/projects/",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDQxZmU2MS04YzQ1LTQwNzktYTVkNS1hZjRhZjExZGE1ZDIiLCJleHAiOjE3NTAxNTczODh9.QTCf4JoERXoCnb2zfnB_xMP7eTWOj00-fOzV56pi68U",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "https://work-1-tgaufxkwcjeifuoc.prod-runtime.all-hands.dev/api/v1/projects/",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyZDQxZmU2MS04YzQ1LTQwNzktYTVkNS1hZjRhZjExZGE1ZDIiLCJleHAiOjE3NTAxNTczODh9.QTCf4JoERXoCnb2zfnB_xMP7eTWOj00-fOzV56pi68U",
+      "referer": "http://localhost:12001/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  },
+  {
+    "url": "http://localhost:12001/api/placeholder/32/32",
+    "method": "GET",
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "http://localhost:12001/dashboard",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/136.0.7103.25 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"136\", \"HeadlessChrome\";v=\"136\", \"Not.A/Brand\";v=\"99\"",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "post_data": null
+  }
+]

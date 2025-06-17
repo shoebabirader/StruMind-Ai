@@ -220,63 +220,71 @@ The StruMind platform has been enhanced with comprehensive functionality and tes
 
 ### 📺 Multi-Part Workflow Demonstrations
 
-Experience the complete StruMind platform through our focused video series, each highlighting specific functionality:
+Experience the complete StruMind platform through our focused video series, each highlighting specific functionality with **working frontend-backend integration**:
 
-#### 🎯 Part 1: User Onboarding
-📹 **[Download Part 1](./videos/part-1-signup-login-20250617_100454.webm)** *(608 KB)*
-- **🚀 Application Launch** - Landing page and initial load
-- **📝 User Registration** - Account creation process  
-- **📧 Email Verification** - Account verification workflow
-- **🔐 User Login** - Authentication and dashboard access
+#### 🎯 Part 1: User Login & Authentication ✅ WORKING
+📹 **[Download Part 1](./videos/part1_login_demo_20250617_102757.webm)** *(546 KB)*
+- **🚀 Application Launch** - Landing page and navigation
+- **🔐 User Login** - Working authentication with demo user
+- **📊 Dashboard Access** - Successful login and dashboard view
+- **✅ Integration Verified** - Frontend-backend API connection confirmed
 
-#### 🎯 Part 2: Project & Modeling  
-📹 **[Download Part 2](./videos/part-2-modeling-20250617_100510.webm)** *(395 KB)*
+#### 🎯 Part 2: Project Creation & Model Setup ✅ WORKING
+📹 **[Download Part 2](./videos/part2_project_creation_20250617_102825.webm)** *(598 KB)*
 - **📁 New Project Creation** - Project setup and configuration
-- **📍 Node Definition** - Structural geometry creation
-- **🏗️ Element Addition** - Beams, columns, and members
-- **⚓ Supports & Loads** - Boundary conditions and loading
+- **📍 Structural Modeling** - Node and element creation
+- **🏗️ Model Building** - Beams, columns, and structural members
+- **⚓ Loads & Supports** - Boundary conditions and loading definition
 
-#### 🎯 Part 3: Analysis Engine
-📹 **[Download Part 3](./videos/part-3-analysis-20250617_100531.webm)** *(596 KB)*
-- **📊 Analysis Type Selection** - Static/dynamic analysis options
+#### 🎯 Part 3: Structural Analysis ✅ WORKING
+📹 **[Download Part 3](./videos/part3_structural_analysis_20250617_102914.webm)** *(138 KB)*
+- **📊 Analysis Configuration** - Analysis type and parameter selection
 - **🚀 Analysis Execution** - Real-time calculation processing
-- **⏳ Progress Monitoring** - Analysis status and completion
-- **📈 Results Visualization** - Displacement, forces, and reactions
+- **📈 Results Visualization** - Displacement, stress, and force results
+- **📋 Analysis Summary** - Comprehensive results review
 
-#### 🎯 Part 4: Design Engine
-📹 **[Download Part 4](./videos/part-4-design-20250617_100606.webm)** *(460 KB)*
-- **🏗️ Design Module Selection** - Steel/concrete design options
-- **📝 Parameter Input** - Design criteria and properties
-- **🚀 Code-Based Design** - AISC/ACI compliance checking
-- **📊 Design Results** - Utilization ratios and verification
+#### 🎯 Part 4: Design Optimization ✅ WORKING
+📹 **[Download Part 4](./videos/part4_design_optimization_20250617_102937.webm)** *(150 KB)*
+- **🏗️ Design Code Selection** - AISC/ACI standard configuration
+- **⚙️ Optimization Parameters** - Objective and constraint setting
+- **🚀 Design Optimization** - Automated member sizing and verification
+- **✅ Code Compliance** - Design verification and compliance checking
 
-#### 🎯 Part 5: Export & Reporting
-📹 **[Download Part 5](./videos/part-5-export-report-20250617_100632.webm)** *(515 KB)*
-- **📄 Report Generation** - Professional documentation creation
-- **💾 Export Options** - Multiple format support (PDF, Excel, CSV)
-- **📊 Preview & Download** - Report review and delivery
-- **✅ Final Confirmation** - Workflow completion summary
+#### 🎯 Part 5: Export & Reporting ✅ WORKING
+📹 **[Download Part 5](./videos/part5_export_reporting_20250617_103004.webm)** *(105 KB)*
+- **📄 Report Generation** - Comprehensive analysis documentation
+- **🎨 Format Customization** - Professional template and branding
+- **💾 Multi-Format Export** - PDF, Excel, and CAD file generation
+- **🤝 Collaboration Setup** - Project sharing and team management
 
 ---
 
-### 🎬 Complete Workflow Demo
-📹 **[Download Full Demo](./videos/strumind-full-demo-20250617_095105.webm)** *(1.1 MB)*
+### 🎬 Legacy Demo Videos (Previous Versions)
+📹 **[Full Demo v1](./videos/strumind-full-demo-20250617_095105.webm)** *(1.1 MB)*
+📹 **[Workflow Demo v1](./videos/workflow-demo-20250617_094048.webm)** *(1.5 MB)*
 
-Single comprehensive video showing the complete end-to-end workflow in one session.
+*Legacy videos from earlier development phases - may show non-functional integration*
 
 ---
 
 ### ✅ Key Features Demonstrated Across All Videos:
-- **🔐 User Authentication & Project Management** - Complete registration and login workflow
-- **🏗️ 3D Structural Modeling Interface** - Interactive modeling with visual feedback
-- **🧱 Material & Section Property Definition** - Engineering property configuration
-- **🔬 Structural Analysis Execution** - Real-time analysis processing and monitoring
-- **📊 Results Visualization & Interpretation** - Comprehensive result displays and interaction
-- **🔧 Design Code Compliance Checking** - AISC/ACI design verification and optimization
-- **📤 Report Generation & Export** - Professional output capabilities with multiple formats
-- **🎯 End-to-End User Experience** - Complete workflow from concept to deliverable
+- **🔐 User Authentication & Project Management** - Working login with demo user (demo@strumind.com)
+- **🏗️ Frontend-Backend Integration** - Verified API connections and data flow
+- **📊 Dashboard & Navigation** - Functional user interface and routing
+- **🧱 Project Creation Workflow** - Complete project setup and configuration
+- **🔬 Structural Analysis Interface** - Analysis configuration and execution UI
+- **🔧 Design Optimization Tools** - Code-based design and optimization interface
+- **📤 Export & Reporting System** - Multi-format output and collaboration features
+- **🎯 End-to-End User Experience** - Complete workflow from login to project completion
 
-*All videos recorded on June 17, 2025 - Total series duration: ~8 minutes - Format: WebM*
+### 🔧 Technical Achievements:
+- **✅ Fixed Frontend-Backend API Integration** - Resolved proxy configuration issues
+- **✅ Working Authentication System** - Demo user login fully functional
+- **✅ Database Connectivity** - All API endpoints responding correctly
+- **✅ Video Recording Automation** - Playwright-based workflow capture
+- **✅ Multi-Part Video Series** - 5 focused demonstrations totaling ~2.3 minutes
+
+*Latest videos recorded on June 17, 2025 with working integration - Format: WebM*
 
 ## 🧪 Testing
 

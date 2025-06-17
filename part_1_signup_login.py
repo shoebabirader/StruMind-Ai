@@ -24,13 +24,13 @@ class StruMindPart1Demo:
         self.timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
         # New user for demo
-        self.new_user = {
-            "email": f"newuser.{int(time.time())}@strumind.com",
-            "username": f"newuser{int(time.time())}",
-            "first_name": "John",
-            "last_name": "Engineer",
-            "password": "SecurePassword123!",
-            "company": "Demo Engineering Corp"
+        self.demo_user = {
+            "email": "demo@strumind.com",
+            "username": "demo",
+            "first_name": "Demo",
+            "last_name": "User",
+            "password": "DemoPassword123!",
+            "company": "Demo Engineering"
         }
 
     async def setup_browser(self, playwright):
@@ -73,17 +73,17 @@ class StruMindPart1Demo:
         await page.evaluate("window.scrollTo(0, 0)")
         await page.wait_for_timeout(2000)
 
-    async def step_2_signup_process(self, page: Page):
-        """Sign up a new user"""
-        print("\n📝 Step 2: User Signup Process...")
+    async def step_2_login_process(self, page: Page):
+        """Login with demo user"""
+        print("\n🔐 Step 2: User Login Process...")
         
-        # Look for signup button
-        signup_buttons = page.locator(
-            'button:has-text("Sign Up"), a:has-text("Sign Up"), button:has-text("Register"), '
-            'a:has-text("Register"), [data-testid="signup"]'
+        # Look for login button
+        login_buttons = page.locator(
+            'button:has-text("Sign In"), a:has-text("Sign In"), button:has-text("Login"), '
+            'a:has-text("Login"), [data-testid="login"]'
         )
         
-        if await signup_buttons.count() > 0:
+        if await login_buttons.count() > 0:
             print("✅ Found Sign Up button")
             await signup_buttons.first.click()
             await page.wait_for_timeout(3000)
@@ -106,40 +106,40 @@ class StruMindPart1Demo:
         # Email field
         email_input = page.locator('input[type="email"], input[name="email"], input[placeholder*="email" i]')
         if await email_input.count() > 0:
-            await email_input.first.fill(self.new_user["email"])
+            await email_input.first.fill(self.demo_user["email"])
             await page.wait_for_timeout(1000)
-            print(f"✅ Entered email: {self.new_user['email']}")
+            print(f"✅ Entered email: {self.demo_user['email']}")
         
         # Username field
         username_input = page.locator('input[name="username"], input[placeholder*="username" i]')
         if await username_input.count() > 0:
-            await username_input.first.fill(self.new_user["username"])
+            await username_input.first.fill(self.demo_user["username"])
             await page.wait_for_timeout(1000)
-            print(f"✅ Entered username: {self.new_user['username']}")
+            print(f"✅ Entered username: {self.demo_user['username']}")
         
         # First name
         fname_input = page.locator('input[name="first_name"], input[name="firstName"], input[placeholder*="first" i]')
         if await fname_input.count() > 0:
-            await fname_input.first.fill(self.new_user["first_name"])
+            await fname_input.first.fill(self.demo_user["first_name"])
             await page.wait_for_timeout(1000)
         
         # Last name
         lname_input = page.locator('input[name="last_name"], input[name="lastName"], input[placeholder*="last" i]')
         if await lname_input.count() > 0:
-            await lname_input.first.fill(self.new_user["last_name"])
+            await lname_input.first.fill(self.demo_user["last_name"])
             await page.wait_for_timeout(1000)
         
         # Password
         password_input = page.locator('input[type="password"], input[name="password"]')
         if await password_input.count() > 0:
-            await password_input.first.fill(self.new_user["password"])
+            await password_input.first.fill(self.demo_user["password"])
             await page.wait_for_timeout(1000)
             print("✅ Entered password")
         
         # Confirm password
         confirm_password = page.locator('input[name="confirm_password"], input[name="confirmPassword"]')
         if await confirm_password.count() > 0:
-            await confirm_password.first.fill(self.new_user["password"])
+            await confirm_password.first.fill(self.demo_user["password"])
             await page.wait_for_timeout(1000)
         
         # Submit form
@@ -205,9 +205,9 @@ class StruMindPart1Demo:
         
         if await email_input.count() > 0 and await password_input.count() > 0:
             print("✅ Filling login credentials")
-            await email_input.first.fill(self.new_user["email"])
+            await email_input.first.fill(self.demo_user["email"])
             await page.wait_for_timeout(1000)
-            await password_input.first.fill(self.new_user["password"])
+            await password_input.first.fill(self.demo_user["password"])
             await page.wait_for_timeout(1000)
             
             # Submit login
@@ -275,7 +275,7 @@ class StruMindPart1Demo:
             
             try:
                 await self.step_1_launch_app(page)
-                await self.step_2_signup_process(page)
+                await self.step_2_login_process(page)
                 await self.step_3_email_verification(page)
                 await self.step_4_login_process(page)
                 await self.step_5_dashboard_view(page)
