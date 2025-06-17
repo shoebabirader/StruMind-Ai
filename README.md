@@ -216,26 +216,36 @@ The StruMind platform has been enhanced with comprehensive functionality and tes
 - **Navigation System**: ✅ Application navigation working properly
 - **Complete Workflow**: ✅ End-to-end workflow executed successfully
 
-### Workflow Demo Video:
-📹 **[Download Workflow Demo Video](./videos/workflow-demo-20250617_094048.webm)**
+## 🎥 Full Workflow Demo
 
-The video demonstrates a complete end-to-end workflow including:
-1. **Application Startup**: Landing page load and initial UI exploration
-2. **Navigation Testing**: Interactive button clicks and UI element exploration
-3. **Project Workflow**: Form interactions and project creation simulation
-4. **Structural Modeling**: Interface exploration and modeling capabilities
-5. **Analysis Workflow**: Analysis service verification and workflow demonstration
-6. **Results Visualization**: Results exploration and export functionality testing
-7. **Complete UI Tour**: Comprehensive application feature demonstration
+📹 **[Download Complete Workflow Demo](./videos/strumind-full-demo-20250617_095105.webm)**
 
-*Video recorded on June 17, 2025 - Duration: ~2 minutes - Size: 1.5MB - Format: WebM*
+This comprehensive video demonstrates the complete StruMind structural engineering workflow from start to finish:
 
-**Key Features Demonstrated:**
-- ✅ Responsive UI with interactive elements
-- ✅ Form handling and user input processing
-- ✅ Navigation system and page transitions
-- ✅ Backend API integration and health verification
-- ✅ Complete application workflow from start to finish
+### 🔄 Complete Workflow Steps Demonstrated:
+
+1. **🚀 Application Launch** - Landing page and initial application load
+2. **🔐 User Authentication** - Sign in process with test credentials  
+3. **📁 New Project Creation** - Project setup and configuration
+4. **🏗️ Structural Modeling** - Adding nodes, members, and supports with 3D interaction
+5. **🧱 Materials & Sections** - Defining material properties and structural sections
+6. **🔬 Structural Analysis** - Running analysis calculations and computations
+7. **📊 Analysis Results** - Viewing deflections, forces, stress visualization
+8. **🔧 Design Checks** - Performing steel/concrete design code verification
+9. **📤 Export Reports** - Generating and downloading design reports
+10. **🎯 Final Overview** - Application summary and navigation tour
+
+*Video recorded on June 17, 2025 - Duration: ~3 minutes - Size: 1.1MB - Format: WebM*
+
+### ✅ Key Features Demonstrated:
+- **User Authentication & Project Management** - Complete login and project workflow
+- **3D Structural Modeling Interface** - Interactive modeling with visual feedback
+- **Material & Section Property Definition** - Engineering property configuration
+- **Structural Analysis Execution** - Real-time analysis processing
+- **Results Visualization & Interpretation** - Comprehensive result displays
+- **Design Code Compliance Checking** - AISC/ACI design verification
+- **Report Generation & Export** - Professional output capabilities
+- **End-to-End User Experience** - Complete workflow from concept to deliverable
 
 ## 🧪 Testing
 
