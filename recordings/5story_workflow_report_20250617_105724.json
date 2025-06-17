@@ -1,0 +1,20 @@
+{
+  "timestamp": "20250617_105724",
+  "success": false,
+  "project_type": "5-Story Commercial Building",
+  "video_path": "./videos/5story_building_complete_20250617_105724.webm",
+  "frontend_url": "http://localhost:12001",
+  "backend_url": "http://localhost:8000",
+  "demo_user": "demo@strumind.com",
+  "project_data": {
+    "name": "5-Story Commercial Building",
+    "description": "Complete structural design of a 5-story commercial building with concrete frame",
+    "project_type": "commercial",
+    "location": "Downtown Business District",
+    "client": "ABC Development Corp"
+  },
+  "workflow_steps": [
+    "Failed during execution"
+  ],
+  "technical_features_tested": []
+}

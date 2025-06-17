@@ -220,17 +220,23 @@ The StruMind platform has been enhanced with comprehensive functionality and tes
 
 We have successfully implemented all enhancements from the ENHANCEMENT_REPORT.md and created a comprehensive working demonstration of the complete StruMind workflow.
 
-### 🎬 Complete Workflow Video
+### 🎬 Complete Workflow Videos
 
-**Complete StruMind Workflow Demo** *(450 KB)*
-📹 **[Download Complete Workflow](./videos/complete_workflow_20250617_104902.webm)**
-
-**✅ FULLY WORKING DEMONSTRATION:**
+**📹 Video 1: Basic Workflow Demo** *(450 KB)*
+📹 **[Download Basic Workflow](./videos/complete_workflow_20250617_104902.webm)**
 - ✅ **Working Authentication**: Complete login flow with demo user
 - ✅ **Dashboard Access**: Successful redirect and dashboard functionality  
 - ✅ **Project Creation**: Full project setup and configuration
 - ✅ **Project Management**: Navigation through project sections
 - ✅ **End-to-End Integration**: Frontend-backend communication verified
+
+**📹 Video 2: 5-Story Building Project Demo** *(1.2 MB)*
+📹 **[Download 5-Story Building Demo](./videos/5story_building_complete_20250617_105724.webm)**
+- 🏗️ **5-Story Commercial Building**: Complete project creation for multi-story structure
+- 📋 **Detailed Project Setup**: Comprehensive project configuration with client details
+- 🏢 **Commercial Building Type**: Realistic commercial development project
+- 📊 **Enhanced Project Overview**: Detailed project information and specifications
+- 🎯 **Professional Workflow**: Real-world structural engineering project demonstration
 
 ### 🔧 Technical Achievements
 
@@ -276,7 +282,7 @@ For testing the application, use these demo credentials:
 - ✅ Project creation: PASSED
 - ✅ Complete workflow: PASSED
 
-**Video Contents:**
+**Video 1 Contents:**
 1. Homepage navigation
 2. User login with demo credentials
 3. Successful dashboard access
@@ -285,7 +291,24 @@ For testing the application, use these demo credentials:
 6. Project navigation and exploration
 7. Return to dashboard with created project
 
-*Latest video recorded on June 17, 2025 with fully working integration - Format: WebM*
+**Video 2 Contents:**
+1. Homepage and authentication workflow
+2. 5-story commercial building project creation
+3. Detailed project configuration (client: ABC Development Corp)
+4. Project overview with design codes and specifications
+5. Professional project management interface
+6. Enhanced dashboard with multiple projects
+
+### 🤖 Automated Testing Scripts
+
+**📋 Comprehensive Workflow Testing**
+- `complete_workflow_test.py` - Basic workflow automation with video recording
+- `comprehensive_5story_workflow.py` - Advanced 5-story building project automation
+- Playwright-based browser automation with screenshot capture
+- Automated API testing and validation
+- Video recording with 1920x1080 resolution
+
+*Latest videos recorded on June 17, 2025 with fully working integration - Format: WebM*
 
 ## 🧪 Testing
 
